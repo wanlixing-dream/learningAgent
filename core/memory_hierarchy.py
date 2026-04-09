@@ -18,16 +18,21 @@ class MemoryHierarchy:
     3. 长期记忆（Long-term Memory）：永久存储，按重要性归档
     """
     
-    def __init__(self, base_dir: Path):
+    def __init__(self, base_dir: Path, compression_ratio: float = 0.3):
         """
         初始化记忆层次管理器
         
         Args:
             base_dir: 基础目录
+            compression_ratio: 压缩比例
         """
         self.base_dir = Path(base_dir)
         self.working_memory: Dict[str, List[Dict]] = {}  # 当前会话
         self.short_term_cache: Dict[str, List[Dict]] = {}  # 最近7天
+        
+        # 延迟导入，避免循环依赖
+        from core.memory_compressor import MemoryCompressor
+        self.compressor = MemoryCompressor(compression_ratio)
         
         # 创建目录结构
         self._setup_directories()
@@ -451,3 +456,66 @@ class MemoryHierarchy:
                 pass
         
         return stats
+    
+    def compress_memories(self, domain: str, target_count: int = 10) -> Dict:
+        """
+        压缩记忆
+        
+        Args:
+            domain: 领域名称
+            target_count: 目标记忆数量
+            
+        Returns:
+            压缩统计信息
+        """
+        # 获取所有记忆
+        all_memories = self.retrieve(domain, top_k=100)
+        
+        if len(all_memories) <= target_count:
+            return {
+                'original_count': len(all_memories),
+                'compressed_count': len(all_memories),
+                'compressed': False
+            }
+        
+        # 合并相似记忆
+        merged_memories = self.compressor.merge_similar(all_memories)
+        
+        # 批量压缩
+        compressed_contents = self.compressor.batch_compress(merged_memories)
+        
+        # 更新记忆内容
+        for memory in merged_memories:
+            if memory['id'] in compressed_contents:
+                memory['content'] = compressed_contents[memory['id']]
+        
+        # 清空现有记忆
+        self.clear_working_memory(domain)
+        self.short_term_cache.pop(domain, None)
+        
+        # 重新存储压缩后的记忆
+        for memory in merged_memories[:target_count]:
+            if domain not in self.working_memory:
+                self.working_memory[domain] = []
+            self.working_memory[domain].append(memory)
+        
+        return {
+            'original_count': len(all_memories),
+            'compressed_count': len(merged_memories[:target_count]),
+            'compressed': True,
+            'space_saved': len(all_memories) - len(merged_memories[:target_count])
+        }
+    
+    def get_memory_summary(self, domain: str, max_length: int = 200) -> str:
+        """
+        获取记忆摘要
+        
+        Args:
+            domain: 领域名称
+            max_length: 最大长度
+            
+        Returns:
+            摘要文本
+        """
+        memories = self.retrieve(domain, top_k=20)
+        return self.compressor.summarize(memories, max_length)
