@@ -5,10 +5,11 @@ import json
 import os
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Tuple
 from hello_agents import HelloAgentsLLM
 from core.file_manager import FileManager
 from core.summary_manager import SummaryManager
+from core.memory_conflict_resolver import MemoryConflictResolver
 
 
 class AddKnowledgeProcessor:
@@ -21,6 +22,7 @@ class AddKnowledgeProcessor:
     - 智能分类和打标签
     - 提取关键概念
     - 生成文件名
+    - 检测知识冲突
     - 保存到 knowledge 目录
     - 更新 knowledge_summary.md
     """
@@ -36,6 +38,7 @@ class AddKnowledgeProcessor:
         self.llm = llm
         self.file_manager = file_manager
         self.summary_manager = SummaryManager(file_manager)
+        self.conflict_resolver = MemoryConflictResolver()
 
     def _identify_input_type(self, input_data: str) -> str:
         """
@@ -381,6 +384,25 @@ class AddKnowledgeProcessor:
         else:
             return f"❌ 未知的输入类型：{input_type}"
 
+        # 检测知识冲突
+        existing_knowledge = self._load_existing_knowledge(domain)
+        if existing_knowledge:
+            conflicts = self.conflict_resolver.detect_conflicts(content, existing_knowledge)
+            
+            if conflicts:
+                # 发现冲突，返回冲突信息
+                conflict_info = self._format_conflict_info(conflicts, existing_knowledge)
+                return f"""⚠️ 检测到知识冲突
+
+{conflict_info}
+
+💡 建议：
+- 使用 `/add <领域> --force <内容>` 强制添加
+- 或修改内容后重新添加
+
+当前操作已取消，避免知识冗余。
+"""
+
         # 分析内容
         metadata = self._analyze_content(content, domain)
 
@@ -400,3 +422,68 @@ class AddKnowledgeProcessor:
 
         except Exception as e:
             return f"❌ 添加知识失败：{e}"
+    
+    def _load_existing_knowledge(self, domain: str) -> List[str]:
+        """
+        加载现有知识内容
+        
+        Args:
+            domain: 领域名称
+            
+        Returns:
+            现有知识内容列表
+        """
+        knowledge_dir = self.file_manager.BASE_DIR / domain / "knowledge"
+        
+        if not knowledge_dir.exists():
+            return []
+        
+        contents = []
+        # 读取所有.md文件（排除summary文件）
+        for file_path in knowledge_dir.glob("*.md"):
+            if file_path.name != "knowledge_summary.md":
+                try:
+                    content = file_path.read_text(encoding="utf-8")
+                    contents.append(content)
+                except Exception:
+                    continue
+        
+        return contents
+    
+    def _format_conflict_info(
+        self, 
+        conflicts: List[Tuple[int, float, str]], 
+        existing_knowledge: List[str]
+    ) -> str:
+        """
+        格式化冲突信息
+        
+        Args:
+            conflicts: 冲突列表
+            existing_knowledge: 现有知识列表
+            
+        Returns:
+            格式化的冲突信息
+        """
+        info_lines = []
+        
+        for idx, similarity, conflict_type in conflicts:
+            existing_content = existing_knowledge[idx]
+            # 截取前100个字符作为预览
+            preview = existing_content[:100].replace('\n', ' ')
+            if len(existing_content) > 100:
+                preview += "..."
+            
+            conflict_type_cn = {
+                'duplicate': '完全重复',
+                'update': '更新版本',
+                'contradiction': '矛盾冲突',
+                'supplement': '补充信息'
+            }.get(conflict_type, conflict_type)
+            
+            info_lines.append(
+                f"📄 知识 #{idx+1} (相似度: {similarity:.2%}, 类型: {conflict_type_cn})\n"
+                f"   {preview}"
+            )
+        
+        return "\n\n".join(info_lines)
