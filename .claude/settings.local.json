@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(touch:*)",
+      "Bash(python:*)",
+      "Bash(pytest:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(tree:*)",
+      "Bash(find:*)",
+      "Bash(/opt/homebrew/anaconda3/bin/conda run:*)",
+      "Bash(wc:*)",
+      "Skill(superpowers:executing-plans)"
+    ],
+    "additionalDirectories": [
+      "/Users/wuyixiang/AI/HelloAgents/"
+    ]
+  }
+}
