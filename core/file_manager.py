@@ -20,6 +20,10 @@ class FileManager:
     def __init__(self):
         """初始化文件管理器，确保基础目录存在"""
         self.ensure_structure()
+        
+        # 延迟导入，避免循环依赖
+        from core.memory_hierarchy import MemoryHierarchy
+        self.memory_hierarchy = MemoryHierarchy(self.BASE_DIR)
 
     def ensure_structure(self) -> None:
         """确保基础目录结构存在"""
