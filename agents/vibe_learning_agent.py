@@ -76,6 +76,13 @@ class VibeLearningAgent(SimpleAgent):
             self._retriever = None
             self._rag_enabled = False
 
+        # 掌握度追踪器（可选）
+        try:
+            from core.mastery_tracker import MasteryTracker
+            self._mastery_tracker = MasteryTracker()
+        except Exception:
+            self._mastery_tracker = None
+
         # 使用父类初始化
         super().__init__("VibeLearningAgent", llm, system_prompt)
 
@@ -429,7 +436,12 @@ class VibeLearningAgent(SimpleAgent):
 
             # 尝试解析 JSON
             # 简化实现：使用规则提取
-            return self._extract_evaluation(response)
+            result = self._extract_evaluation(response)
+
+            # 更新掌握度追踪
+            self._update_mastery_from_eval(question, result)
+
+            return result
 
         except Exception:
             # 降级：返回默认评估
@@ -461,6 +473,37 @@ class VibeLearningAgent(SimpleAgent):
                 "mastery_level": "medium",
                 "suggested_next": "maintain",
             }
+
+    def _update_mastery_from_eval(self, question: str, evaluation: dict) -> None:
+        """根据评估结果更新概念掌握度"""
+        if not self._mastery_tracker or not hasattr(self, 'current_domain'):
+            return
+        try:
+            # 从问题中提取概念（简化：取前20字作为概念标识）
+            concept = question[:20].strip().replace("\n", " ")
+            if not concept:
+                concept = "general"
+            score = evaluation.get("score", 0.5)
+            correct = score >= 0.6
+            self._mastery_tracker.update(self.current_domain, concept, correct)
+
+            # 答错时写入弱点记忆
+            if not correct:
+                try:
+                    from core.memory_store import MemoryStore
+                    from core.memory_schema import MemoryRecord
+                    store = MemoryStore()
+                    store.add(MemoryRecord(
+                        content=f"薄弱概念：{question[:200]}",
+                        domain=self.current_domain,
+                        memory_type="weakness",
+                        importance=0.7,
+                        source="vibe_quiz",
+                    ))
+                except Exception:
+                    pass
+        except Exception:
+            pass
 
     def _summarize_session(self, conversation: List[str], domain: str) -> str:
         """

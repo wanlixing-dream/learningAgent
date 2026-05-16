@@ -80,6 +80,18 @@ class SummaryAgent(SimpleAgent):
             self._retriever = None
             self._rag_enabled = False
 
+        # 长期记忆检索器（可选）
+        try:
+            from core.memory_store import MemoryStore
+            from core.memory_retriever import MemoryRetriever
+            from core.mastery_tracker import MasteryTracker
+            store = MemoryStore()
+            self._memory_retriever = MemoryRetriever(store=store)
+            self._mastery_tracker = MasteryTracker()
+        except Exception:
+            self._memory_retriever = None
+            self._mastery_tracker = None
+
         # 使用父类初始化
         super().__init__("SummaryAgent", llm, system_prompt)
 
@@ -138,6 +150,28 @@ class SummaryAgent(SimpleAgent):
 
         rag_section = f"\n\n【语义检索的关键知识点】\n{rag_knowledge}" if rag_knowledge else ""
 
+        # 长期记忆检索
+        memory_section = ""
+        if self._memory_retriever:
+            try:
+                mem_results = self._memory_retriever.retrieve(domain=domain, query=plan[:300], top_k=5)
+                if mem_results:
+                    mem_lines = [f"- {r.content[:100]}" for r, _ in mem_results]
+                    memory_section = f"\n\n【长期记忆】\n" + "\n".join(mem_lines)
+            except Exception:
+                pass
+
+        # 掌握度数据
+        mastery_section = ""
+        if self._mastery_tracker:
+            try:
+                weak = self._mastery_tracker.get_weak_concepts(domain)
+                if weak:
+                    weak_lines = [f"- {w['concept']}: {int(w['mastery']*100)}%" for w in weak[:5]]
+                    mastery_section = f"\n\n【薄弱概念】\n" + "\n".join(weak_lines)
+            except Exception:
+                pass
+
         # 生成总结
         user_prompt = f"""请分析以下学习情况：
 
@@ -148,7 +182,7 @@ class SummaryAgent(SimpleAgent):
 {knowledge_summary[:2000]}
 
 【学习历程】
-{session_summary[:2000]}{rag_section}
+{session_summary[:2000]}{rag_section}{memory_section}{mastery_section}
 
 请按照系统提示词的格式生成学习进度报告。
 """

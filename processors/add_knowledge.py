@@ -53,6 +53,13 @@ class AddKnowledgeProcessor:
         except Exception:
             self._rag_enabled = False
 
+        # 长期记忆存储（可选）
+        try:
+            from core.memory_store import MemoryStore
+            self._memory_store = MemoryStore()
+        except Exception:
+            self._memory_store = None
+
     def _identify_input_type(self, input_data: str) -> str:
         """
         识别输入类型
@@ -440,6 +447,27 @@ class AddKnowledgeProcessor:
                     rag_info = f"\n🔍 已索引 {count} 个语义块到向量库"
                 except Exception:
                     rag_info = "\n⚠️ 向量索引未生效（不影响使用）"
+
+            # 写入长期记忆
+            if self._memory_store:
+                try:
+                    from core.memory_schema import MemoryRecord
+                    from core.entity_extractor import extract_entities
+                    self._memory_store.add(MemoryRecord(
+                        content=content[:500],
+                        domain=domain,
+                        memory_type="fact",
+                        entities=extract_entities(content),
+                        importance=0.6,
+                        source="add_knowledge",
+                        metadata={
+                            "category": metadata.get("category", ""),
+                            "tags": metadata.get("tags", []),
+                            "filename": file_path.name,
+                        },
+                    ))
+                except Exception:
+                    pass
 
             # 更新摘要
             self.summary_manager.update_knowledge_summary(domain, file_path.name)

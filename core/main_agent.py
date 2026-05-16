@@ -69,6 +69,13 @@ class MainAgent(SimpleAgent):
         # 会话状态管理
         self.active_session = None  # {"domain": str, "mode": str, "round": int}
 
+        # 链路追踪（可选）
+        try:
+            from core.tracing import TraceRecorder
+            self._tracer = TraceRecorder()
+        except Exception:
+            self._tracer = None
+
         # 使用父类初始化
         super().__init__("MainAgent", llm, system_prompt)
 
@@ -113,22 +120,46 @@ class MainAgent(SimpleAgent):
         # 正常命令处理
         intent = self._identify_intent(user_input)
 
-        if intent == "create":
-            return self._route_to_create_plan(user_input)
-        elif intent == "add":
-            return self._route_to_add_knowledge(user_input)
-        elif intent == "vibe":
-            return self._route_to_vibe_learning(user_input)
-        elif intent == "summary":
-            return self._route_to_summary(user_input)
-        elif intent == "help":
-            return self._show_help()
-        elif intent == "list":
-            return self._list_domains()
-        elif intent == "exit":
-            return "EXIT"
-        elif intent == "unknown":
-            return "❓ 未识别的命令。输入 /help 查看帮助。"
+        # 启动链路追踪
+        trace_id = None
+        if self._tracer:
+            try:
+                agent_name = {
+                    "create": "CreatePlanAgent", "add": "AddKnowledgeProcessor",
+                    "vibe": "VibeLearningAgent", "summary": "SummaryAgent",
+                }.get(intent, "MainAgent")
+                trace_id = self._tracer.start_trace(user_input, intent, agent_name)
+            except Exception:
+                pass
+
+        try:
+            if intent == "create":
+                result = self._route_to_create_plan(user_input)
+            elif intent == "add":
+                result = self._route_to_add_knowledge(user_input)
+            elif intent == "vibe":
+                result = self._route_to_vibe_learning(user_input)
+            elif intent == "summary":
+                result = self._route_to_summary(user_input)
+            elif intent == "help":
+                result = self._show_help()
+            elif intent == "list":
+                result = self._list_domains()
+            elif intent == "exit":
+                result = "EXIT"
+            elif intent == "unknown":
+                result = "❓ 未识别的命令。输入 /help 查看帮助。"
+            else:
+                result = "❓ 未识别的命令。输入 /help 查看帮助。"
+
+            if trace_id and self._tracer:
+                self._tracer.end_trace(trace_id, "success")
+            return result
+
+        except Exception as e:
+            if trace_id and self._tracer:
+                self._tracer.end_trace(trace_id, "error", str(e))
+            raise
 
     def _route_to_create_plan(self, input_data: str) -> str:
         """
