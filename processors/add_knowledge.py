@@ -40,6 +40,19 @@ class AddKnowledgeProcessor:
         self.summary_manager = SummaryManager(file_manager)
         self.conflict_resolver = MemoryConflictResolver()
 
+        # RAG 管线初始化（可选，失败不影响核心功能）
+        try:
+            from core.rag.chunker import Chunker
+            from core.rag.vector_store import VectorStore
+            from core.rag.embedder import Embedder
+
+            self._chunker = Chunker()
+            self._embedder = Embedder()
+            self._vector_store = VectorStore(embedder=self._embedder)
+            self._rag_enabled = True
+        except Exception:
+            self._rag_enabled = False
+
     def _identify_input_type(self, input_data: str) -> str:
         """
         识别输入类型
@@ -410,6 +423,24 @@ class AddKnowledgeProcessor:
         try:
             file_path = self._save_knowledge(domain, content, metadata)
 
+            # RAG 入库
+            rag_info = ""
+            if self._rag_enabled:
+                try:
+                    chunks = self._chunker.chunk(
+                        content,
+                        metadata={
+                            "domain": domain,
+                            "category": metadata.get("category", ""),
+                            "tags": ",".join(metadata.get("tags", [])),
+                            "source": file_path.name,
+                        },
+                    )
+                    count = self._vector_store.index_chunks(domain, chunks)
+                    rag_info = f"\n🔍 已索引 {count} 个语义块到向量库"
+                except Exception:
+                    rag_info = "\n⚠️ 向量索引未生效（不影响使用）"
+
             # 更新摘要
             self.summary_manager.update_knowledge_summary(domain, file_path.name)
 
@@ -417,7 +448,7 @@ class AddKnowledgeProcessor:
 
 📁 保存位置: {domain}/knowledge/{file_path.name}
 📊 分类: {metadata.get('category', '通用')}
-🏷️  标签: {', '.join(metadata.get('tags', []))}
+🏷️  标签: {', '.join(metadata.get('tags', []))}{rag_info}
 """
 
         except Exception as e:

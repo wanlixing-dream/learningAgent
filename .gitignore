@@ -51,3 +51,5 @@ htmlcov/
 # Project Specific
 .claude/
 *.log
+claude-code-sourcemap
+.venv/

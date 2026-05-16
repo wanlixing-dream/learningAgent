@@ -66,6 +66,20 @@ class SummaryAgent(SimpleAgent):
         from utils.streaming import should_stream
         self.streaming = should_stream(streaming)
 
+        # RAG 检索器（可选）
+        try:
+            from core.rag.embedder import Embedder
+            from core.rag.vector_store import VectorStore
+            from core.rag.retriever import HybridRetriever
+
+            embedder = Embedder()
+            vector_store = VectorStore(embedder=embedder)
+            self._retriever = HybridRetriever(vector_store=vector_store)
+            self._rag_enabled = True
+        except Exception:
+            self._retriever = None
+            self._rag_enabled = False
+
         # 使用父类初始化
         super().__init__("SummaryAgent", llm, system_prompt)
 
@@ -109,6 +123,21 @@ class SummaryAgent(SimpleAgent):
         except Exception as e:
             return f"❌ 读取文件失败：{e}"
 
+        # RAG 增强：检索与学习计划最相关的知识
+        rag_knowledge = ""
+        if self._rag_enabled and self._retriever:
+            try:
+                results = self._retriever.retrieve(
+                    domain=domain,
+                    query=plan[:300],
+                    top_k=5,
+                )
+                rag_knowledge = self._retriever.format_context(results)
+            except Exception:
+                rag_knowledge = ""
+
+        rag_section = f"\n\n【语义检索的关键知识点】\n{rag_knowledge}" if rag_knowledge else ""
+
         # 生成总结
         user_prompt = f"""请分析以下学习情况：
 
@@ -119,7 +148,7 @@ class SummaryAgent(SimpleAgent):
 {knowledge_summary[:2000]}
 
 【学习历程】
-{session_summary[:2000]}
+{session_summary[:2000]}{rag_section}
 
 请按照系统提示词的格式生成学习进度报告。
 """

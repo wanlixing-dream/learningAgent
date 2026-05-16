@@ -62,6 +62,20 @@ class VibeLearningAgent(SimpleAgent):
         from utils.streaming import should_stream
         self.streaming = should_stream(streaming)
 
+        # RAG 检索器（可选）
+        try:
+            from core.rag.embedder import Embedder
+            from core.rag.vector_store import VectorStore
+            from core.rag.retriever import HybridRetriever
+
+            embedder = Embedder()
+            vector_store = VectorStore(embedder=embedder)
+            self._retriever = HybridRetriever(vector_store=vector_store)
+            self._rag_enabled = True
+        except Exception:
+            self._retriever = None
+            self._rag_enabled = False
+
         # 使用父类初始化
         super().__init__("VibeLearningAgent", llm, system_prompt)
 
@@ -78,6 +92,9 @@ class VibeLearningAgent(SimpleAgent):
         Returns:
             第一个问题
         """
+        # 记录当前领域（供 RAG 检索使用）
+        self.current_domain = domain
+
         # 检查领域是否存在
         if not self.file_manager.domain_exists(domain):
             return f"❌ 领域 '{domain}' 不存在。请先使用 /create 创建学习计划。"
@@ -216,9 +233,23 @@ class VibeLearningAgent(SimpleAgent):
             return self.quiz_generator.generate_question(plan, difficulty="easy")
         else:
             # free 模式：生成开放性问题
+            # RAG 检索相关知识
+            rag_context = ""
+            if self._rag_enabled and self._retriever:
+                try:
+                    results = self._retriever.retrieve(
+                        domain=self.current_domain if hasattr(self, 'current_domain') else "",
+                        query=plan[:200],
+                        top_k=3,
+                    )
+                    rag_context = self._retriever.format_context(results)
+                except Exception:
+                    rag_context = ""
+
+            rag_section = f"\n\n【相关知识参考】\n{rag_context}" if rag_context else ""
             user_prompt = f"""基于以下学习计划，生成一个开放性的问题，开始对话：
 
-{plan[:2000]}
+{plan[:2000]}{rag_section}
 
 问题应该：
 1. 从基础概念开始
@@ -318,7 +349,7 @@ class VibeLearningAgent(SimpleAgent):
 
 用户回答：{answer}
 
-参考计划：{plan[:1000]}
+参考计划：{plan[:1000]}{self._get_rag_context(answer)}
 
 生成友好的反馈（100字以内）：
 1. 肯定正确的部分
@@ -342,6 +373,18 @@ class VibeLearningAgent(SimpleAgent):
                 return self.llm.invoke(messages).strip()
         except Exception:
             return "好的，谢谢你的回答。让我们继续深入探讨这个话题。"
+
+    def _get_rag_context(self, query: str) -> str:
+        """获取 RAG 检索上下文"""
+        if not self._rag_enabled or not self._retriever:
+            return ""
+        try:
+            domain = self.current_domain if hasattr(self, 'current_domain') else ""
+            results = self._retriever.retrieve(domain=domain, query=query, top_k=2)
+            context = self._retriever.format_context(results)
+            return f"\n\n【知识库参考】\n{context}" if context else ""
+        except Exception:
+            return ""
 
     def _evaluate_answer(
         self, question: str, answer: str, plan: str

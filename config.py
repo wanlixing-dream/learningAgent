@@ -31,6 +31,19 @@ class Config:
     # Summary Configuration
     SUMMARY_FULL_REWRITE_THRESHOLD: ClassVar[int] = 5
 
+    # RAG Configuration
+    RAG_EMBEDDING_MODEL: str = os.getenv(
+        "RAG_EMBEDDING_MODEL",
+        str(Path.home() / ".cache/modelscope/BAAI/bge-m3")
+        if (Path.home() / ".cache/modelscope/BAAI/bge-m3").exists()
+        else "BAAI/bge-m3"
+    )
+    RAG_CHUNK_SIZE: int = int(os.getenv("RAG_CHUNK_SIZE", "512"))
+    RAG_CHUNK_OVERLAP: int = int(os.getenv("RAG_CHUNK_OVERLAP", "64"))
+    RAG_BM25_WEIGHT: float = float(os.getenv("RAG_BM25_WEIGHT", "0.3"))
+    RAG_TOP_K: int = int(os.getenv("RAG_TOP_K", "5"))
+    RAG_SIMILARITY_THRESHOLD: float = float(os.getenv("RAG_SIMILARITY_THRESHOLD", "0.3"))
+
     @classmethod
     def validate(cls) -> None:
         """Validate that required configuration is present.
