@@ -1,13 +1,18 @@
 # LearningAgent
 
-一个基于 HelloAgents 框架的智能学习助手，通过 AI 对话帮助你创建学习计划、记录知识和追踪学习进度。
+一个具备 MCP 集成、多范围长期记忆、混合检索、Agent 可观测性和自适应学习反馈的个性化 AI 学习代理。
 
 ## 功能特性
 
-- 📚 **创建学习计划** - 基于领域描述、GitHub 项目或学术论文生成个性化学习路径
-- ✨ **添加知识笔记** - 智能分类、标签化并管理你的学习笔记（支持文本/文件/URL）
-- 💬 **互动学习** - 通过对话和问答巩固知识（支持 free 和 quiz 两种模式）
-- 📊 **进度追踪** - 评估学习进度并提供建议
+- 📚 **创建学习计划** — 基于领域描述、GitHub 项目或学术论文生成个性化学习路径
+- ✨ **添加知识笔记** — 智能分类、标签化并管理学习笔记，自动写入长期记忆 + RAG 向量索引
+- 💬 **互动学习** — 对话/测验两种模式，答题后自动更新概念掌握度
+- 📊 **进度追踪** — 结合知识总结、长期记忆、薄弱概念生成进度报告
+- 🔍 **RAG 检索增强** — ChromaDB 向量存储 + BM25 混合检索，注入学习上下文
+- 🧠 **多范围长期记忆** — JSONL 存储，支持 7 种记忆类型，5 信号混合检索
+- � **自适应学习** — 概念级掌握度追踪、薄弱点检测、间隔复习推荐
+- 📮 **MCP Server** — 将学习功能暴露为标准化 MCP Tools/Resources/Prompts
+- 📍 **Agent 可观测性** — 全链路追踪 + 5 维度确定性评估
 
 ## 快速开始
 
@@ -167,24 +172,44 @@ SummaryAgent 综合分析以下数据：
 
 ## 架构
 
-LearningAgent 采用三层 Agent 架构：
+```
+CLI / MCP Client
+      ↓
+MainAgent Router (意图识别 + 链路追踪)
+      ↓
+CreatePlan | AddKnowledge | VibeLearning | Summary
+      ↓
+RAG Pipeline | MemoryStore | MasteryTracker | TraceRecorder
+      ↓
+Local Markdown/JSON/ChromaDB Storage
+```
 
-- **协调层** (Layer 1): MainAgent - 意图识别和路由
-- **功能层** (Layer 2):
-  - CreatePlanAgent - 创建学习计划
-  - AddKnowledgeProcessor - 添加知识笔记
-  - VibeLearningAgent - 互动学习
-  - SummaryAgent - 学习总结
-- **专业层** (Layer 3):
-  - RepoAnalyzerAgent - GitHub 仓库分析
-  - PaperAnalyzerAgent - PDF 论文分析
-  - QuizGeneratorAgent - 测验生成
+### 三层 Agent 架构
+
+- **协调层**: `MainAgent` — 意图识别、路由、链路追踪
+- **功能层**:
+  - `CreatePlanAgent` — 学习计划生成
+  - `AddKnowledgeProcessor` — 知识入库 + RAG 索引 + 长期记忆
+  - `VibeLearningAgent` — 互动学习 + 掌握度追踪
+  - `SummaryAgent` — 进度报告 + 记忆检索 + 薄弱点分析
+- **专业层**: `RepoAnalyzerAgent` / `PaperAnalyzerAgent` / `QuizGeneratorAgent`
+
+### 基础设施
+
+- **RAG Pipeline**: `Embedder` → `Chunker` → `VectorStore` (ChromaDB) → `HybridRetriever` (BM25 + Vector)
+- **多范围记忆**: `MemorySchema` → `MemoryStore` (JSONL) → `MemoryRetriever` (5-signal hybrid)
+- **自适应学习**: `MasteryTracker` — 概念级掌握度、间隔复习
+- **可观测性**: `TraceRecorder` + `AgentEvaluator` — 全链路追踪和 5 维度确定性评分
+- **MCP Server**: Tools / Resources / Prompts — 标准化服务接口
 
 ## 开发
 
 ```bash
-# 运行单元测试
-pytest tests/
+# 运行全量测试
+pytest tests/ -v
+
+# 启动 MCP Server
+python -m mcp_server.server
 
 # 运行真实环境演示（需要配置 .env）
 python demo_create_plan.py       # CreatePlan 功能演示
@@ -192,65 +217,52 @@ python demo_add_knowledge.py    # AddKnowledge 功能演示
 python demo_vibe_learning.py    # VibeLearning 功能演示
 python demo_summary_learning.py # Summary 功能演示
 
-# 代码格式化
+# 代码质量
 black .
-
-# 类型检查
 mypy .
-
-# 代码检查
 flake8 .
 ```
 
-## 当前开发状态
+### MCP 集成
 
-### ✅ 已完成（v0.1.0 - 核心基础）
+LearningAgent 可作为 MCP Server 被外部 AI 客户端调用：
 
-- [x] 项目初始化和目录结构
-- [x] 异常类和错误处理框架
-- [x] FileManager - 文件管理
-- [x] SummaryManager - 摘要更新（混合策略）
-- [x] MainAgent - 意图识别和路由
-- [x] 基础 REPL 循环
-- [x] 单元测试和集成测试
+- **Tools**: `list_learning_domains` / `get_learning_plan` / `get_progress_summary` / `search_learning_memory` / `add_knowledge_note` / `get_weak_concepts` / `update_concept_mastery`
+- **Resources**: `learning://domains` / `learning://domain/{domain}/plan` / `knowledge_summary` / `session_summary` / `mastery`
+- **Prompts**: `learn_from_github_repo` / `paper_to_learning_plan` / `weekly_learning_review` / `quiz_weak_points`
 
-### ✅ 已完成（v0.2.0 - CreatePlan 功能）
+## 开发状态
 
-- [x] CreatePlanAgent 实现
-- [x] RepoAnalyzerAgent（GitHub 分析）
-- [x] PaperAnalyzerAgent（PDF 分析）
-- [x] 学习计划生成
-- [x] 真实环境测试
+### ✅ v0.1–v0.5: 核心功能
 
-### ✅ 已完成（v0.3.0 - AddKnowledge 功能）
+创建计划 / 添加知识 / 互动学习 / 进度总结 / MainAgent 路由
 
-- [x] AddKnowledgeProcessor 实现
-- [x] LLM 内容分析
-- [x] 智能分类和标签
-- [x] 文件/URL 支持
-- [x] MainAgent 集成
-- [x] 真实环境测试
+### ✅ v0.6: RAG Pipeline
 
-### ✅ 已完成（v0.4.0 - VibeLearning 功能）
+- [x] Embedder (BAAI/bge-m3 sentence-transformers)
+- [x] Chunker (递归 Markdown 感知分块)
+- [x] VectorStore (ChromaDB 持久化)
+- [x] HybridRetriever (BM25 + Vector fusion)
+- [x] RAGEvaluator (RAGAS + fallback)
+- [x] 集成到 AddKnowledge / VibeLearning / Summary
 
-- [x] QuizGeneratorAgent 实现
-- [x] VibeLearningAgent 实现
-- [x] 两种学习模式（free/quiz）
-- [x] 会话记录和总结
-- [x] MainAgent 集成
-- [x] 真实环境测试
+### ✅ v0.7: Agent 可观测性 + 多范围记忆 + MCP
 
-### ✅ 已完成（v0.5.0 - Summary 功能）
+- [x] TraceRecorder — 全链路追踪 (intent → steps → result)
+- [x] AgentEvaluator — 5 维度确定性评分
+- [x] MemorySchema + MemoryStore — 7 种类型、JSONL 存储、按领域分片
+- [x] EntityExtractor — Markdown/反引号/CamelCase/技术关键词规则提取
+- [x] MemoryRetriever — 语义+关键词+实体+重要性+时效 5 信号加权
+- [x] MasteryTracker — 概念级掌握度、间隔复习、薄弱点检测
+- [x] MCP Server — 7 Tools + Resources + 4 Prompts
+- [x] 集成到全部学习流（记忆写入/检索/掌握度/追踪）
 
-- [x] SummaryAgent 实现
-- [x] 进度评估
-- [x] 学习建议
-- [x] MainAgent 集成
-- [x] 真实环境测试
+## 规划文档
 
-## 开发路线图
-
-详细规划请查看 [设计文档](docs/plans/2025-01-09-learningagent-design.md) 和 [实施计划](docs/plans/2025-01-09-core-infrastructure.md)
+- [设计文档](docs/plans/2025-01-09-learningagent-design.md)
+- [实施计划](docs/plans/2025-01-09-core-infrastructure.md)
+- [Agent 升级路线图](docs/plans/2026-05-14-agent-upgrade-roadmap.md)
+- [RAG 实施计划](docs/superpowers/plans/2026-05-17-rag-pipeline.md)
 
 ## 许可证
 
