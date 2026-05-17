@@ -116,6 +116,23 @@ cp .env.example .env
 # 编辑 .env 文件，填入你的 API Key
 ```
 
+### 导入预置学习数据（推荐新手）
+
+项目内置了 4 个零基础学习领域，**完全不知道学什么的用户**可以一键导入：
+
+```bash
+# 查看可用领域
+python seed_data.py --list
+
+# 一键导入所有预置课程（编程启蒙、Python入门、Web开发入门、人工智能入门）
+python seed_data.py
+
+# 只导入指定领域
+python seed_data.py 编程启蒙
+```
+
+导入后即可直接开始学习，无需手动添加任何知识。
+
 ### 使用
 
 ```bash
@@ -124,12 +141,13 @@ python main.py
 
 # 在 REPL 中
 > /help                    # 显示帮助
-> /create Python           # 创建学习计划
+> /list                    # 列出所有学习领域
+> /vibe 编程启蒙            # 从零开始学编程
+> /vibe Python入门          # 学 Python 基础
+> /create 数据分析          # 创建自定义学习计划
 > /add Python # 装饰器模式  # 添加知识笔记
-> /vibe Python             # 开始互动学习
 > /vibe Python --mode quiz # 开始测验模式
 > /summary Python          # 查看学习总结
-> /list                    # 列出所有学习领域
 > /exit                    # 退出
 ```
 
