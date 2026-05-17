@@ -1,59 +1,55 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 340" width="920" height="340" font-family="Segoe UI, PingFang SC, Microsoft YaHei, sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 330" width="920" height="330" font-family="Helvetica Neue, Arial, PingFang SC, Microsoft YaHei, sans-serif">
   <defs>
-    <marker id="m1" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#7209b7"/></marker>
-    <marker id="m2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#1a1a2e"/></marker>
-    <linearGradient id="bg3" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#fafbff"/><stop offset="100%" stop-color="#f5f5fa"/>
-    </linearGradient>
+    <marker id="m1" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto"><path d="M0,0 L7,2.5 L0,5" fill="#6b5b7b"/></marker>
+    <marker id="m2" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto"><path d="M0,0 L7,2.5 L0,5" fill="#3d4f5f"/></marker>
   </defs>
-  <rect width="920" height="340" rx="12" fill="url(#bg3)" stroke="#e0e0e8" stroke-width="1"/>
-  <text x="460" y="28" font-size="15" fill="#1a1a2e" text-anchor="middle" font-weight="700">Fig 3. Multi-Scope Memory — 5-Signal Hybrid Retrieval</text>
+  <rect width="920" height="330" fill="#ffffff"/>
+  <text x="460" y="26" font-size="14" fill="#2c3e50" text-anchor="middle" font-weight="700" letter-spacing="0.5">Fig 3.  Multi-Scope Memory — 5-Signal Hybrid Retrieval</text>
+  <line x1="140" y1="34" x2="780" y2="34" stroke="#bdc3c7" stroke-width="0.5"/>
 
   <!-- Memory Types -->
-  <text x="40" y="56" font-size="12" fill="#7209b7" font-weight="600">7 Memory Types (MemorySchema)</text>
-  <rect x="40" y="66" width="95" height="30" rx="5" fill="#7209b7"/><text x="87" y="85" font-size="10" fill="#fff" text-anchor="middle">fact</text>
-  <rect x="145" y="66" width="95" height="30" rx="5" fill="#7209b7"/><text x="192" y="85" font-size="10" fill="#fff" text-anchor="middle">preference</text>
-  <rect x="250" y="66" width="95" height="30" rx="5" fill="#7209b7"/><text x="297" y="85" font-size="10" fill="#fff" text-anchor="middle">weakness</text>
-  <rect x="355" y="66" width="95" height="30" rx="5" fill="#7209b7"/><text x="402" y="85" font-size="10" fill="#fff" text-anchor="middle">milestone</text>
-  <rect x="460" y="66" width="115" height="30" rx="5" fill="#7209b7"/><text x="517" y="85" font-size="10" fill="#fff" text-anchor="middle">misconception</text>
-  <rect x="585" y="66" width="95" height="30" rx="5" fill="#7209b7"/><text x="632" y="85" font-size="10" fill="#fff" text-anchor="middle">resource</text>
-  <rect x="690" y="66" width="140" height="30" rx="5" fill="#7209b7"/><text x="760" y="85" font-size="10" fill="#fff" text-anchor="middle">session_summary</text>
+  <text x="40" y="56" font-size="10" fill="#6b5b7b" font-weight="600" letter-spacing="0.5">7 MEMORY TYPES (MemorySchema)</text>
+  <rect x="40" y="64" width="90" height="28" rx="3" fill="#6b5b7b"/><text x="85" y="82" font-size="9.5" fill="#fff" text-anchor="middle">fact</text>
+  <rect x="140" y="64" width="90" height="28" rx="3" fill="#6b5b7b"/><text x="185" y="82" font-size="9.5" fill="#fff" text-anchor="middle">preference</text>
+  <rect x="240" y="64" width="90" height="28" rx="3" fill="#6b5b7b"/><text x="285" y="82" font-size="9.5" fill="#fff" text-anchor="middle">weakness</text>
+  <rect x="340" y="64" width="90" height="28" rx="3" fill="#6b5b7b"/><text x="385" y="82" font-size="9.5" fill="#fff" text-anchor="middle">milestone</text>
+  <rect x="440" y="64" width="110" height="28" rx="3" fill="#6b5b7b"/><text x="495" y="82" font-size="9.5" fill="#fff" text-anchor="middle">misconception</text>
+  <rect x="560" y="64" width="90" height="28" rx="3" fill="#6b5b7b"/><text x="605" y="82" font-size="9.5" fill="#fff" text-anchor="middle">resource</text>
+  <rect x="660" y="64" width="135" height="28" rx="3" fill="#6b5b7b"/><text x="727" y="82" font-size="9.5" fill="#fff" text-anchor="middle">session_summary</text>
 
-  <!-- Arrow -->
-  <line x1="420" y1="96" x2="420" y2="120" stroke="#7209b7" stroke-width="1.5" marker-end="url(#m1)"/>
+  <line x1="420" y1="92" x2="420" y2="114" stroke="#6b5b7b" stroke-width="1" marker-end="url(#m1)"/>
 
   <!-- MemoryStore -->
-  <rect x="250" y="120" width="340" height="52" rx="8" fill="#1a1a2e"/>
-  <text x="420" y="142" font-size="12" fill="#fff" text-anchor="middle" font-weight="600">MemoryStore (Append-only JSONL)</text>
-  <text x="420" y="160" font-size="9.5" fill="#aaa" text-anchor="middle">全量 records.jsonl + 按领域分片 by_domain/&lt;domain&gt;.jsonl</text>
+  <rect x="240" y="114" width="360" height="48" rx="4" fill="#3d4f5f"/>
+  <text x="420" y="134" font-size="11" fill="#fff" text-anchor="middle" font-weight="600">MemoryStore (Append-only JSONL)</text>
+  <text x="420" y="150" font-size="8.5" fill="#a0b0be" text-anchor="middle">全量 records.jsonl + 按领域分片 by_domain/&lt;domain&gt;.jsonl</text>
 
-  <!-- Arrow -->
-  <line x1="420" y1="172" x2="420" y2="198" stroke="#1a1a2e" stroke-width="1.5" marker-end="url(#m2)"/>
+  <line x1="420" y1="162" x2="420" y2="186" stroke="#3d4f5f" stroke-width="1" marker-end="url(#m2)"/>
 
   <!-- MemoryRetriever -->
-  <rect x="80" y="198" width="760" height="120" rx="10" fill="#fff7ed" stroke="#fb8500" stroke-width="1.5"/>
-  <text x="100" y="222" font-size="12" fill="#fb8500" font-weight="600">MemoryRetriever — 5-Signal Weighted Scoring</text>
+  <rect x="80" y="186" width="760" height="110" rx="4" fill="#faf8f5" stroke="#8c7a6b" stroke-width="1"/>
+  <text x="100" y="208" font-size="10" fill="#8c7a6b" font-weight="600" letter-spacing="0.5">MemoryRetriever — 5-Signal Weighted Scoring</text>
 
   <!-- 5 signals -->
-  <rect x="100" y="234" width="130" height="44" rx="5" fill="#4361ee"/>
-  <text x="165" y="253" font-size="10" fill="#fff" text-anchor="middle" font-weight="600">Semantic</text>
-  <text x="165" y="268" font-size="10" fill="#b8c9ff" text-anchor="middle">w = 0.40</text>
-  <rect x="240" y="234" width="130" height="44" rx="5" fill="#f72585"/>
-  <text x="305" y="253" font-size="10" fill="#fff" text-anchor="middle" font-weight="600">Keyword</text>
-  <text x="305" y="268" font-size="10" fill="#ffc2dd" text-anchor="middle">w = 0.25</text>
-  <rect x="380" y="234" width="130" height="44" rx="5" fill="#06d6a0"/>
-  <text x="445" y="253" font-size="10" fill="#fff" text-anchor="middle" font-weight="600">Entity</text>
-  <text x="445" y="268" font-size="10" fill="#d0f5e7" text-anchor="middle">w = 0.20</text>
-  <rect x="520" y="234" width="130" height="44" rx="5" fill="#fb8500"/>
-  <text x="585" y="253" font-size="10" fill="#fff" text-anchor="middle" font-weight="600">Importance</text>
-  <text x="585" y="268" font-size="10" fill="#ffe0b2" text-anchor="middle">w = 0.10</text>
-  <rect x="660" y="234" width="130" height="44" rx="5" fill="#7209b7"/>
-  <text x="725" y="253" font-size="10" fill="#fff" text-anchor="middle" font-weight="600">Recency</text>
-  <text x="725" y="268" font-size="10" fill="#e0cfef" text-anchor="middle">w = 0.05</text>
+  <rect x="100" y="220" width="126" height="40" rx="3" fill="#5b7ea1"/>
+  <text x="163" y="237" font-size="9.5" fill="#fff" text-anchor="middle" font-weight="600">Semantic</text>
+  <text x="163" y="252" font-size="9" fill="#c5d5e4" text-anchor="middle">w = 0.40</text>
+  <rect x="236" y="220" width="126" height="40" rx="3" fill="#a15b6b"/>
+  <text x="299" y="237" font-size="9.5" fill="#fff" text-anchor="middle" font-weight="600">Keyword</text>
+  <text x="299" y="252" font-size="9" fill="#dfc5cb" text-anchor="middle">w = 0.25</text>
+  <rect x="372" y="220" width="126" height="40" rx="3" fill="#4a7c6f"/>
+  <text x="435" y="237" font-size="9.5" fill="#fff" text-anchor="middle" font-weight="600">Entity</text>
+  <text x="435" y="252" font-size="9" fill="#c8ddd6" text-anchor="middle">w = 0.20</text>
+  <rect x="508" y="220" width="126" height="40" rx="3" fill="#8c7a6b"/>
+  <text x="571" y="237" font-size="9.5" fill="#fff" text-anchor="middle" font-weight="600">Importance</text>
+  <text x="571" y="252" font-size="9" fill="#d5cdc3" text-anchor="middle">w = 0.10</text>
+  <rect x="644" y="220" width="126" height="40" rx="3" fill="#6b5b7b"/>
+  <text x="707" y="237" font-size="9.5" fill="#fff" text-anchor="middle" font-weight="600">Recency</text>
+  <text x="707" y="252" font-size="9" fill="#d4cce0" text-anchor="middle">w = 0.05</text>
 
   <!-- Formula -->
-  <rect x="100" y="286" width="720" height="24" rx="4" fill="#f0f1f5"/>
-  <text x="460" y="303" font-size="11" text-anchor="middle" font-family="Consolas, JetBrains Mono, monospace" fill="#333">
-    score = 0.40·semantic + 0.25·keyword + 0.20·entity + 0.10·importance + 0.05·recency
+  <rect x="100" y="270" width="720" height="20" rx="3" fill="#f7f8fa" stroke="#d5d8dc"/>
+  <text x="460" y="284" font-size="11" text-anchor="middle" font-family="Georgia, Times New Roman, serif" fill="#2c3e50" font-style="italic">
+    score = 0.40 · semantic + 0.25 · keyword + 0.20 · entity + 0.10 · importance + 0.05 · recency
   </text>
 </svg>

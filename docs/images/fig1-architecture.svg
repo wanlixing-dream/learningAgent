@@ -1,79 +1,76 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 540" width="920" height="540" font-family="Segoe UI, PingFang SC, Microsoft YaHei, sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 540" width="920" height="540" font-family="Helvetica Neue, Arial, PingFang SC, Microsoft YaHei, sans-serif">
   <defs>
-    <marker id="arrowBlue" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#4361ee"/></marker>
-    <marker id="arrowOrange" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#fb8500"/></marker>
-    <marker id="arrowPurple" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#7209b7"/></marker>
-    <linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#fafbff"/><stop offset="100%" stop-color="#f5f5fa"/>
-    </linearGradient>
+    <marker id="arrowA" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto"><path d="M0,0 L7,2.5 L0,5" fill="#5b7ea1"/></marker>
+    <marker id="arrowB" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto"><path d="M0,0 L7,2.5 L0,5" fill="#8c7a6b"/></marker>
+    <marker id="arrowC" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto"><path d="M0,0 L7,2.5 L0,5" fill="#6b5b7b"/></marker>
   </defs>
-  <!-- Background -->
-  <rect width="920" height="540" rx="12" fill="url(#bgGrad)" stroke="#e0e0e8" stroke-width="1"/>
+  <rect width="920" height="540" fill="#ffffff"/>
   <!-- Title -->
-  <text x="460" y="32" font-size="15" fill="#1a1a2e" text-anchor="middle" font-weight="700">Fig 1. Three-Layer Agent Architecture</text>
+  <text x="460" y="30" font-size="14" fill="#2c3e50" text-anchor="middle" font-weight="700" letter-spacing="0.5">Fig 1.  Three-Layer Agent Architecture</text>
+  <line x1="160" y1="38" x2="760" y2="38" stroke="#bdc3c7" stroke-width="0.5"/>
 
-  <!-- Interface Layer -->
-  <rect x="40" y="50" width="840" height="80" rx="10" fill="#eef2ff" stroke="#4361ee" stroke-width="1.5" stroke-dasharray="6,3"/>
-  <text x="60" y="76" font-size="11" fill="#4361ee" font-weight="600">Interface Layer</text>
-  <rect x="100" y="82" width="110" height="34" rx="6" fill="#4361ee"/><text x="155" y="103" font-size="12" fill="#fff" text-anchor="middle" font-weight="500">CLI REPL</text>
-  <rect x="225" y="82" width="130" height="34" rx="6" fill="#4361ee"/><text x="290" y="103" font-size="12" fill="#fff" text-anchor="middle" font-weight="500">Web Dashboard</text>
-  <rect x="370" y="82" width="120" height="34" rx="6" fill="#4361ee"/><text x="430" y="103" font-size="12" fill="#fff" text-anchor="middle" font-weight="500">MCP Server</text>
-  <rect x="505" y="82" width="120" height="34" rx="6" fill="#4361ee"/><text x="565" y="103" font-size="12" fill="#fff" text-anchor="middle" font-weight="500">REST API</text>
-  <!-- Arrow -->
-  <line x1="360" y1="130" x2="360" y2="155" stroke="#4361ee" stroke-width="1.5" marker-end="url(#arrowBlue)"/>
+  <!-- Layer A: Interface -->
+  <rect x="50" y="52" width="820" height="78" rx="4" fill="#f0f4f8" stroke="#5b7ea1" stroke-width="1"/>
+  <text x="68" y="72" font-size="10" fill="#5b7ea1" font-weight="600" letter-spacing="0.5">INTERFACE LAYER</text>
+  <rect x="110" y="82" width="105" height="32" rx="4" fill="#5b7ea1"/><text x="162" y="102" font-size="10.5" fill="#fff" text-anchor="middle" font-weight="500">CLI REPL</text>
+  <rect x="228" y="82" width="125" height="32" rx="4" fill="#5b7ea1"/><text x="290" y="102" font-size="10.5" fill="#fff" text-anchor="middle" font-weight="500">Web Dashboard</text>
+  <rect x="366" y="82" width="115" height="32" rx="4" fill="#5b7ea1"/><text x="423" y="102" font-size="10.5" fill="#fff" text-anchor="middle" font-weight="500">MCP Server</text>
+  <rect x="494" y="82" width="105" height="32" rx="4" fill="#5b7ea1"/><text x="546" y="102" font-size="10.5" fill="#fff" text-anchor="middle" font-weight="500">REST API</text>
 
-  <!-- Coordination Layer -->
-  <rect x="40" y="155" width="840" height="90" rx="10" fill="#fff3e0" stroke="#fb8500" stroke-width="1.5" stroke-dasharray="6,3"/>
-  <text x="60" y="182" font-size="11" fill="#fb8500" font-weight="600">Coordination Layer — MainAgent</text>
-  <rect x="100" y="192" width="150" height="36" rx="6" fill="#fb8500"/><text x="175" y="214" font-size="11" fill="#fff" text-anchor="middle" font-weight="500">Intent Recognizer</text>
-  <rect x="265" y="192" width="135" height="36" rx="6" fill="#fb8500"/><text x="332" y="214" font-size="11" fill="#fff" text-anchor="middle" font-weight="500">Command Router</text>
-  <rect x="415" y="192" width="150" height="36" rx="6" fill="#fb8500"/><text x="490" y="214" font-size="11" fill="#fff" text-anchor="middle" font-weight="500">Session Manager</text>
-  <rect x="580" y="192" width="150" height="36" rx="6" fill="#fb8500"/><text x="655" y="214" font-size="11" fill="#fff" text-anchor="middle" font-weight="500">TraceRecorder</text>
-  <!-- Arrows down -->
-  <line x1="175" y1="245" x2="150" y2="280" stroke="#fb8500" stroke-width="1.2" marker-end="url(#arrowOrange)"/>
-  <line x1="332" y1="245" x2="340" y2="280" stroke="#fb8500" stroke-width="1.2" marker-end="url(#arrowOrange)"/>
-  <line x1="490" y1="245" x2="530" y2="280" stroke="#fb8500" stroke-width="1.2" marker-end="url(#arrowOrange)"/>
-  <line x1="655" y1="245" x2="720" y2="280" stroke="#fb8500" stroke-width="1.2" marker-end="url(#arrowOrange)"/>
+  <line x1="360" y1="130" x2="360" y2="154" stroke="#5b7ea1" stroke-width="1" marker-end="url(#arrowA)"/>
 
-  <!-- Functional Layer -->
-  <rect x="40" y="280" width="840" height="95" rx="10" fill="#f3e5f5" stroke="#7209b7" stroke-width="1.5" stroke-dasharray="6,3"/>
-  <text x="60" y="306" font-size="11" fill="#7209b7" font-weight="600">Functional Layer — Domain Agents</text>
-  <rect x="70" y="314" width="160" height="44" rx="6" fill="#7209b7"/>
-  <text x="150" y="333" font-size="10.5" fill="#fff" text-anchor="middle" font-weight="500">CreatePlanAgent</text>
-  <text x="150" y="348" font-size="9" fill="#e0cfef" text-anchor="middle">学习计划生成</text>
-  <rect x="245" y="314" width="180" height="44" rx="6" fill="#7209b7"/>
-  <text x="335" y="333" font-size="10.5" fill="#fff" text-anchor="middle" font-weight="500">AddKnowledgeProcessor</text>
-  <text x="335" y="348" font-size="9" fill="#e0cfef" text-anchor="middle">知识入库 + RAG 索引</text>
-  <rect x="440" y="314" width="175" height="44" rx="6" fill="#7209b7"/>
-  <text x="527" y="333" font-size="10.5" fill="#fff" text-anchor="middle" font-weight="500">VibeLearningAgent</text>
-  <text x="527" y="348" font-size="9" fill="#e0cfef" text-anchor="middle">互动学习 + 掌握度追踪</text>
-  <rect x="630" y="314" width="160" height="44" rx="6" fill="#7209b7"/>
-  <text x="710" y="333" font-size="10.5" fill="#fff" text-anchor="middle" font-weight="500">SummaryAgent</text>
-  <text x="710" y="348" font-size="9" fill="#e0cfef" text-anchor="middle">进度报告 + 薄弱点分析</text>
-  <!-- Arrow -->
-  <line x1="400" y1="375" x2="400" y2="405" stroke="#7209b7" stroke-width="1.5" marker-end="url(#arrowPurple)"/>
+  <!-- Layer B: Coordination -->
+  <rect x="50" y="154" width="820" height="88" rx="4" fill="#faf6f1" stroke="#8c7a6b" stroke-width="1"/>
+  <text x="68" y="174" font-size="10" fill="#8c7a6b" font-weight="600" letter-spacing="0.5">COORDINATION LAYER — MainAgent</text>
+  <rect x="110" y="186" width="142" height="34" rx="4" fill="#8c7a6b"/><text x="181" y="207" font-size="10" fill="#fff" text-anchor="middle" font-weight="500">Intent Recognizer</text>
+  <rect x="264" y="186" width="130" height="34" rx="4" fill="#8c7a6b"/><text x="329" y="207" font-size="10" fill="#fff" text-anchor="middle" font-weight="500">Command Router</text>
+  <rect x="406" y="186" width="142" height="34" rx="4" fill="#8c7a6b"/><text x="477" y="207" font-size="10" fill="#fff" text-anchor="middle" font-weight="500">Session Manager</text>
+  <rect x="560" y="186" width="142" height="34" rx="4" fill="#8c7a6b"/><text x="631" y="207" font-size="10" fill="#fff" text-anchor="middle" font-weight="500">TraceRecorder</text>
 
-  <!-- Infrastructure Layer -->
-  <rect x="40" y="405" width="840" height="120" rx="10" fill="#e8f5e9" stroke="#06d6a0" stroke-width="1.5" stroke-dasharray="6,3"/>
-  <text x="60" y="432" font-size="11" fill="#06855a" font-weight="600">Infrastructure Layer</text>
-  <rect x="60" y="442" width="140" height="64" rx="6" fill="#06d6a0"/>
-  <text x="130" y="464" font-size="10.5" fill="#fff" text-anchor="middle" font-weight="600">RAG Pipeline</text>
-  <text x="130" y="478" font-size="8.5" fill="#d0f5e7" text-anchor="middle">Embedder → Chunker</text>
-  <text x="130" y="490" font-size="8.5" fill="#d0f5e7" text-anchor="middle">→ ChromaDB → BM25</text>
-  <rect x="215" y="442" width="140" height="64" rx="6" fill="#06d6a0"/>
-  <text x="285" y="464" font-size="10.5" fill="#fff" text-anchor="middle" font-weight="600">Memory System</text>
-  <text x="285" y="478" font-size="8.5" fill="#d0f5e7" text-anchor="middle">7 types · JSONL</text>
-  <text x="285" y="490" font-size="8.5" fill="#d0f5e7" text-anchor="middle">5-signal retrieval</text>
-  <rect x="370" y="442" width="140" height="64" rx="6" fill="#06d6a0"/>
-  <text x="440" y="464" font-size="10.5" fill="#fff" text-anchor="middle" font-weight="600">Mastery Tracker</text>
-  <text x="440" y="478" font-size="8.5" fill="#d0f5e7" text-anchor="middle">概念级掌握度</text>
-  <text x="440" y="490" font-size="8.5" fill="#d0f5e7" text-anchor="middle">间隔复习调度</text>
-  <rect x="525" y="442" width="140" height="64" rx="6" fill="#06d6a0"/>
-  <text x="595" y="464" font-size="10.5" fill="#fff" text-anchor="middle" font-weight="600">Observability</text>
-  <text x="595" y="478" font-size="8.5" fill="#d0f5e7" text-anchor="middle">TraceRecorder</text>
-  <text x="595" y="490" font-size="8.5" fill="#d0f5e7" text-anchor="middle">5-dim Evaluator</text>
-  <rect x="680" y="442" width="140" height="64" rx="6" fill="#06d6a0"/>
-  <text x="750" y="464" font-size="10.5" fill="#fff" text-anchor="middle" font-weight="600">Storage</text>
-  <text x="750" y="478" font-size="8.5" fill="#d0f5e7" text-anchor="middle">Markdown · JSON</text>
-  <text x="750" y="490" font-size="8.5" fill="#d0f5e7" text-anchor="middle">JSONL · ChromaDB</text>
+  <line x1="181" y1="242" x2="150" y2="276" stroke="#8c7a6b" stroke-width="0.8" marker-end="url(#arrowB)"/>
+  <line x1="329" y1="242" x2="340" y2="276" stroke="#8c7a6b" stroke-width="0.8" marker-end="url(#arrowB)"/>
+  <line x1="477" y1="242" x2="530" y2="276" stroke="#8c7a6b" stroke-width="0.8" marker-end="url(#arrowB)"/>
+  <line x1="631" y1="242" x2="720" y2="276" stroke="#8c7a6b" stroke-width="0.8" marker-end="url(#arrowB)"/>
+
+  <!-- Layer C: Functional -->
+  <rect x="50" y="276" width="820" height="98" rx="4" fill="#f4f0f7" stroke="#6b5b7b" stroke-width="1"/>
+  <text x="68" y="296" font-size="10" fill="#6b5b7b" font-weight="600" letter-spacing="0.5">FUNCTIONAL LAYER — Domain Agents</text>
+  <rect x="72" y="308" width="160" height="48" rx="4" fill="#6b5b7b"/>
+  <text x="152" y="328" font-size="10" fill="#fff" text-anchor="middle" font-weight="500">CreatePlanAgent</text>
+  <text x="152" y="344" font-size="8.5" fill="#d4cce0" text-anchor="middle">学习计划生成</text>
+  <rect x="246" y="308" width="176" height="48" rx="4" fill="#6b5b7b"/>
+  <text x="334" y="328" font-size="10" fill="#fff" text-anchor="middle" font-weight="500">AddKnowledgeProcessor</text>
+  <text x="334" y="344" font-size="8.5" fill="#d4cce0" text-anchor="middle">知识入库 + RAG 索引</text>
+  <rect x="436" y="308" width="172" height="48" rx="4" fill="#6b5b7b"/>
+  <text x="522" y="328" font-size="10" fill="#fff" text-anchor="middle" font-weight="500">VibeLearningAgent</text>
+  <text x="522" y="344" font-size="8.5" fill="#d4cce0" text-anchor="middle">互动学习 + 掌握度追踪</text>
+  <rect x="622" y="308" width="160" height="48" rx="4" fill="#6b5b7b"/>
+  <text x="702" y="328" font-size="10" fill="#fff" text-anchor="middle" font-weight="500">SummaryAgent</text>
+  <text x="702" y="344" font-size="8.5" fill="#d4cce0" text-anchor="middle">进度报告 + 薄弱点分析</text>
+
+  <line x1="400" y1="374" x2="400" y2="400" stroke="#6b5b7b" stroke-width="1" marker-end="url(#arrowC)"/>
+
+  <!-- Layer D: Infrastructure -->
+  <rect x="50" y="400" width="820" height="124" rx="4" fill="#f0f5f3" stroke="#4a7c6f" stroke-width="1"/>
+  <text x="68" y="420" font-size="10" fill="#4a7c6f" font-weight="600" letter-spacing="0.5">INFRASTRUCTURE LAYER</text>
+  <rect x="65" y="434" width="140" height="68" rx="4" fill="#4a7c6f"/>
+  <text x="135" y="456" font-size="10" fill="#fff" text-anchor="middle" font-weight="600">RAG Pipeline</text>
+  <text x="135" y="470" font-size="8" fill="#c8ddd6" text-anchor="middle">Embedder → Chunker</text>
+  <text x="135" y="484" font-size="8" fill="#c8ddd6" text-anchor="middle">→ ChromaDB → BM25</text>
+  <rect x="218" y="434" width="140" height="68" rx="4" fill="#4a7c6f"/>
+  <text x="288" y="456" font-size="10" fill="#fff" text-anchor="middle" font-weight="600">Memory System</text>
+  <text x="288" y="470" font-size="8" fill="#c8ddd6" text-anchor="middle">7 types · JSONL</text>
+  <text x="288" y="484" font-size="8" fill="#c8ddd6" text-anchor="middle">5-signal retrieval</text>
+  <rect x="371" y="434" width="140" height="68" rx="4" fill="#4a7c6f"/>
+  <text x="441" y="456" font-size="10" fill="#fff" text-anchor="middle" font-weight="600">Mastery Tracker</text>
+  <text x="441" y="470" font-size="8" fill="#c8ddd6" text-anchor="middle">概念级掌握度</text>
+  <text x="441" y="484" font-size="8" fill="#c8ddd6" text-anchor="middle">间隔复习调度</text>
+  <rect x="524" y="434" width="140" height="68" rx="4" fill="#4a7c6f"/>
+  <text x="594" y="456" font-size="10" fill="#fff" text-anchor="middle" font-weight="600">Observability</text>
+  <text x="594" y="470" font-size="8" fill="#c8ddd6" text-anchor="middle">TraceRecorder</text>
+  <text x="594" y="484" font-size="8" fill="#c8ddd6" text-anchor="middle">5-dim Evaluator</text>
+  <rect x="677" y="434" width="140" height="68" rx="4" fill="#4a7c6f"/>
+  <text x="747" y="456" font-size="10" fill="#fff" text-anchor="middle" font-weight="600">Storage</text>
+  <text x="747" y="470" font-size="8" fill="#c8ddd6" text-anchor="middle">Markdown · JSON</text>
+  <text x="747" y="484" font-size="8" fill="#c8ddd6" text-anchor="middle">JSONL · ChromaDB</text>
 </svg>

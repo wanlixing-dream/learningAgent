@@ -1,44 +1,42 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 260" width="920" height="260" font-family="Segoe UI, PingFang SC, Microsoft YaHei, sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 250" width="920" height="250" font-family="Helvetica Neue, Arial, PingFang SC, Microsoft YaHei, sans-serif">
   <defs>
-    <marker id="l1" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#4361ee"/></marker>
-    <marker id="l2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#7209b7"/></marker>
-    <marker id="l3" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#f72585"/></marker>
-    <marker id="l5" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#06d6a0"/></marker>
-    <linearGradient id="bg4" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#fafbff"/><stop offset="100%" stop-color="#f5f5fa"/>
-    </linearGradient>
+    <marker id="l1" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto"><path d="M0,0 L7,2.5 L0,5" fill="#5b7ea1"/></marker>
+    <marker id="l2" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto"><path d="M0,0 L7,2.5 L0,5" fill="#6b5b7b"/></marker>
+    <marker id="l3" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto"><path d="M0,0 L7,2.5 L0,5" fill="#a15b6b"/></marker>
+    <marker id="l5" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto"><path d="M0,0 L7,2.5 L0,5" fill="#4a7c6f"/></marker>
   </defs>
-  <rect width="920" height="260" rx="12" fill="url(#bg4)" stroke="#e0e0e8" stroke-width="1"/>
-  <text x="460" y="28" font-size="15" fill="#1a1a2e" text-anchor="middle" font-weight="700">Fig 4. Adaptive Learning Loop — Mastery Tracking &amp; Spaced Repetition</text>
+  <rect width="920" height="250" fill="#ffffff"/>
+  <text x="460" y="26" font-size="14" fill="#2c3e50" text-anchor="middle" font-weight="700" letter-spacing="0.5">Fig 4.  Adaptive Learning Loop — Mastery Tracking &amp; Spaced Repetition</text>
+  <line x1="130" y1="34" x2="790" y2="34" stroke="#bdc3c7" stroke-width="0.5"/>
 
   <!-- Loop nodes -->
-  <rect x="50" y="65" width="155" height="55" rx="8" fill="#4361ee"/>
-  <text x="127" y="88" font-size="12" fill="#fff" text-anchor="middle" font-weight="600">VibeLearning</text>
-  <text x="127" y="106" font-size="9.5" fill="#b8c9ff" text-anchor="middle">Free / Quiz 模式</text>
-  <line x1="205" y1="92" x2="265" y2="92" stroke="#4361ee" stroke-width="1.5" marker-end="url(#l1)"/>
+  <rect x="50" y="60" width="155" height="52" rx="4" fill="#5b7ea1"/>
+  <text x="127" y="82" font-size="11" fill="#fff" text-anchor="middle" font-weight="600">VibeLearning</text>
+  <text x="127" y="100" font-size="8.5" fill="#c5d5e4" text-anchor="middle">Free / Quiz 模式</text>
+  <line x1="205" y1="86" x2="260" y2="86" stroke="#5b7ea1" stroke-width="1" marker-end="url(#l1)"/>
 
-  <rect x="265" y="65" width="155" height="55" rx="8" fill="#f72585"/>
-  <text x="342" y="88" font-size="12" fill="#fff" text-anchor="middle" font-weight="600">Answer Eval</text>
-  <text x="342" y="106" font-size="9.5" fill="#ffc2dd" text-anchor="middle">LLM 判定对/错</text>
-  <line x1="420" y1="92" x2="480" y2="92" stroke="#f72585" stroke-width="1.5" marker-end="url(#l3)"/>
+  <rect x="260" y="60" width="155" height="52" rx="4" fill="#a15b6b"/>
+  <text x="337" y="82" font-size="11" fill="#fff" text-anchor="middle" font-weight="600">Answer Eval</text>
+  <text x="337" y="100" font-size="8.5" fill="#dfc5cb" text-anchor="middle">LLM 判定对/错</text>
+  <line x1="415" y1="86" x2="470" y2="86" stroke="#a15b6b" stroke-width="1" marker-end="url(#l3)"/>
 
-  <rect x="480" y="65" width="175" height="55" rx="8" fill="#06d6a0"/>
-  <text x="567" y="88" font-size="12" fill="#fff" text-anchor="middle" font-weight="600">MasteryTracker</text>
-  <text x="567" y="106" font-size="9.5" fill="#d0f5e7" text-anchor="middle">±mastery · interval</text>
-  <line x1="655" y1="92" x2="715" y2="92" stroke="#06d6a0" stroke-width="1.5" marker-end="url(#l5)"/>
+  <rect x="470" y="60" width="175" height="52" rx="4" fill="#4a7c6f"/>
+  <text x="557" y="82" font-size="11" fill="#fff" text-anchor="middle" font-weight="600">MasteryTracker</text>
+  <text x="557" y="100" font-size="8.5" fill="#c8ddd6" text-anchor="middle">±mastery · interval</text>
+  <line x1="645" y1="86" x2="700" y2="86" stroke="#4a7c6f" stroke-width="1" marker-end="url(#l5)"/>
 
-  <rect x="715" y="65" width="165" height="55" rx="8" fill="#fb8500"/>
-  <text x="797" y="88" font-size="12" fill="#fff" text-anchor="middle" font-weight="600">Weak Concepts</text>
-  <text x="797" y="106" font-size="9.5" fill="#ffe0b2" text-anchor="middle">mastery &lt; 0.4 → 薄弱</text>
+  <rect x="700" y="60" width="170" height="52" rx="4" fill="#8c7a6b"/>
+  <text x="785" y="82" font-size="11" fill="#fff" text-anchor="middle" font-weight="600">Weak Concepts</text>
+  <text x="785" y="100" font-size="8.5" fill="#d5cdc3" text-anchor="middle">mastery &lt; 0.4 → 薄弱</text>
 
   <!-- Feedback loop -->
-  <path d="M797,120 L797,170 L127,170 L127,120" fill="none" stroke="#7209b7" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#l2)"/>
-  <rect x="320" y="158" width="290" height="24" rx="12" fill="#f3e5f5"/>
-  <text x="465" y="174" font-size="10.5" fill="#7209b7" text-anchor="middle" font-weight="500">反馈循环：薄弱概念优先出题 + 间隔复习调度</text>
+  <path d="M785,112 L785,160 L127,160 L127,112" fill="none" stroke="#6b5b7b" stroke-width="1" stroke-dasharray="5,3" marker-end="url(#l2)"/>
+  <rect x="330" y="150" width="270" height="20" rx="10" fill="#f4f0f7"/>
+  <text x="465" y="164" font-size="9.5" fill="#6b5b7b" text-anchor="middle" font-weight="500">反馈循环：薄弱概念优先出题 + 间隔复习调度</text>
 
   <!-- Rules -->
-  <rect x="50" y="210" width="820" height="32" rx="6" fill="#f0f1f5" stroke="#ddd"/>
-  <text x="460" y="231" font-size="12" text-anchor="middle" font-family="Consolas, JetBrains Mono, monospace" fill="#333">
-    correct → mastery += 0.08, review = +3d  |  wrong → mastery -= 0.10, review = +1d
+  <rect x="50" y="200" width="820" height="30" rx="3" fill="#f7f8fa" stroke="#d5d8dc"/>
+  <text x="460" y="220" font-size="11" text-anchor="middle" font-family="Georgia, Times New Roman, serif" fill="#2c3e50" font-style="italic">
+    correct → mastery += 0.08, review = +3d   |   wrong → mastery −= 0.10, review = +1d
   </text>
 </svg>

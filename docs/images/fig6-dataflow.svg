@@ -1,52 +1,46 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 190" width="920" height="190" font-family="Segoe UI, PingFang SC, Microsoft YaHei, sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 185" width="920" height="185" font-family="Helvetica Neue, Arial, PingFang SC, Microsoft YaHei, sans-serif">
   <defs>
-    <marker id="af" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#555"/></marker>
-    <linearGradient id="bg6" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#fafbff"/><stop offset="100%" stop-color="#f5f5fa"/>
-    </linearGradient>
+    <marker id="af" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto"><path d="M0,0 L7,2.5 L0,5" fill="#7f8c8d"/></marker>
   </defs>
-  <rect width="920" height="190" rx="12" fill="url(#bg6)" stroke="#e0e0e8" stroke-width="1"/>
-  <text x="460" y="26" font-size="15" fill="#1a1a2e" text-anchor="middle" font-weight="700">Fig 6. End-to-End Data Flow</text>
+  <rect width="920" height="185" fill="#ffffff"/>
+  <text x="460" y="24" font-size="14" fill="#2c3e50" text-anchor="middle" font-weight="700" letter-spacing="0.5">Fig 6.  End-to-End Data Flow</text>
+  <line x1="280" y1="32" x2="640" y2="32" stroke="#bdc3c7" stroke-width="0.5"/>
 
-  <rect x="20" y="50" width="105" height="55" rx="8" fill="#4361ee"/>
-  <text x="72" y="73" font-size="10.5" fill="#fff" text-anchor="middle" font-weight="600">User Input</text>
-  <text x="72" y="90" font-size="8.5" fill="#b8c9ff" text-anchor="middle">CLI / Web / MCP</text>
-  <line x1="125" y1="77" x2="155" y2="77" stroke="#555" stroke-width="1.2" marker-end="url(#af)"/>
+  <rect x="20" y="48" width="100" height="50" rx="4" fill="#5b7ea1"/>
+  <text x="70" y="69" font-size="10" fill="#fff" text-anchor="middle" font-weight="600">User Input</text>
+  <text x="70" y="86" font-size="8" fill="#c5d5e4" text-anchor="middle">CLI / Web / MCP</text>
+  <line x1="120" y1="73" x2="148" y2="73" stroke="#7f8c8d" stroke-width="1" marker-end="url(#af)"/>
 
-  <rect x="155" y="50" width="105" height="55" rx="8" fill="#fb8500"/>
-  <text x="207" y="73" font-size="10.5" fill="#fff" text-anchor="middle" font-weight="600">MainAgent</text>
-  <text x="207" y="90" font-size="8.5" fill="#ffe0b2" text-anchor="middle">意图 + 路由</text>
-  <line x1="260" y1="77" x2="290" y2="77" stroke="#555" stroke-width="1.2" marker-end="url(#af)"/>
+  <rect x="148" y="48" width="100" height="50" rx="4" fill="#8c7a6b"/>
+  <text x="198" y="69" font-size="10" fill="#fff" text-anchor="middle" font-weight="600">MainAgent</text>
+  <text x="198" y="86" font-size="8" fill="#d5cdc3" text-anchor="middle">意图 + 路由</text>
+  <line x1="248" y1="73" x2="276" y2="73" stroke="#7f8c8d" stroke-width="1" marker-end="url(#af)"/>
 
-  <rect x="290" y="50" width="115" height="55" rx="8" fill="#7209b7"/>
-  <text x="347" y="73" font-size="10.5" fill="#fff" text-anchor="middle" font-weight="600">Domain Agent</text>
-  <text x="347" y="90" font-size="8.5" fill="#e0cfef" text-anchor="middle">业务逻辑</text>
-  <line x1="405" y1="77" x2="435" y2="77" stroke="#555" stroke-width="1.2" marker-end="url(#af)"/>
+  <rect x="276" y="48" width="112" height="50" rx="4" fill="#6b5b7b"/>
+  <text x="332" y="69" font-size="10" fill="#fff" text-anchor="middle" font-weight="600">Domain Agent</text>
+  <text x="332" y="86" font-size="8" fill="#d4cce0" text-anchor="middle">业务逻辑</text>
+  <line x1="388" y1="73" x2="416" y2="73" stroke="#7f8c8d" stroke-width="1" marker-end="url(#af)"/>
 
-  <rect x="435" y="40" width="110" height="33" rx="6" fill="#06d6a0"/>
-  <text x="490" y="60" font-size="9.5" fill="#fff" text-anchor="middle">RAG 检索</text>
-  <rect x="435" y="80" width="110" height="33" rx="6" fill="#06d6a0"/>
-  <text x="490" y="100" font-size="9.5" fill="#fff" text-anchor="middle">Memory 检索</text>
-  <line x1="545" y1="57" x2="570" y2="72" stroke="#555" stroke-width="1"/>
-  <line x1="545" y1="96" x2="570" y2="82" stroke="#555" stroke-width="1"/>
+  <rect x="416" y="40" width="105" height="30" rx="4" fill="#4a7c6f"/><text x="468" y="59" font-size="9" fill="#fff" text-anchor="middle">RAG 检索</text>
+  <rect x="416" y="76" width="105" height="30" rx="4" fill="#4a7c6f"/><text x="468" y="95" font-size="9" fill="#fff" text-anchor="middle">Memory 检索</text>
+  <line x1="521" y1="55" x2="545" y2="68" stroke="#7f8c8d" stroke-width="0.8"/>
+  <line x1="521" y1="91" x2="545" y2="78" stroke="#7f8c8d" stroke-width="0.8"/>
 
-  <rect x="570" y="50" width="105" height="55" rx="8" fill="#f72585"/>
-  <text x="622" y="73" font-size="10.5" fill="#fff" text-anchor="middle" font-weight="600">LLM 生成</text>
-  <text x="622" y="90" font-size="8.5" fill="#ffc2dd" text-anchor="middle">上下文增强</text>
-  <line x1="675" y1="77" x2="705" y2="77" stroke="#555" stroke-width="1.2" marker-end="url(#af)"/>
+  <rect x="545" y="48" width="100" height="50" rx="4" fill="#a15b6b"/>
+  <text x="595" y="69" font-size="10" fill="#fff" text-anchor="middle" font-weight="600">LLM 生成</text>
+  <text x="595" y="86" font-size="8" fill="#dfc5cb" text-anchor="middle">上下文增强</text>
+  <line x1="645" y1="73" x2="673" y2="73" stroke="#7f8c8d" stroke-width="1" marker-end="url(#af)"/>
 
-  <rect x="705" y="40" width="105" height="33" rx="6" fill="#1a1a2e"/>
-  <text x="757" y="60" font-size="9.5" fill="#fff" text-anchor="middle">写入存储</text>
-  <rect x="705" y="80" width="105" height="33" rx="6" fill="#1a1a2e"/>
-  <text x="757" y="100" font-size="9.5" fill="#fff" text-anchor="middle">更新掌握度</text>
-  <line x1="810" y1="57" x2="835" y2="72" stroke="#555" stroke-width="1"/>
-  <line x1="810" y1="96" x2="835" y2="82" stroke="#555" stroke-width="1"/>
+  <rect x="673" y="40" width="100" height="30" rx="4" fill="#3d4f5f"/><text x="723" y="59" font-size="9" fill="#fff" text-anchor="middle">写入存储</text>
+  <rect x="673" y="76" width="100" height="30" rx="4" fill="#3d4f5f"/><text x="723" y="95" font-size="9" fill="#fff" text-anchor="middle">更新掌握度</text>
+  <line x1="773" y1="55" x2="797" y2="68" stroke="#7f8c8d" stroke-width="0.8"/>
+  <line x1="773" y1="91" x2="797" y2="78" stroke="#7f8c8d" stroke-width="0.8"/>
 
-  <rect x="835" y="50" width="68" height="55" rx="8" fill="#4361ee"/>
-  <text x="869" y="73" font-size="10" fill="#fff" text-anchor="middle" font-weight="600">输出</text>
-  <text x="869" y="90" font-size="8.5" fill="#b8c9ff" text-anchor="middle">流式</text>
+  <rect x="797" y="48" width="75" height="50" rx="4" fill="#5b7ea1"/>
+  <text x="834" y="69" font-size="10" fill="#fff" text-anchor="middle" font-weight="600">输出</text>
+  <text x="834" y="86" font-size="8" fill="#c5d5e4" text-anchor="middle">流式</text>
 
   <!-- Bottom trace bar -->
-  <rect x="155" y="130" width="650" height="30" rx="6" fill="#f0f1f5" stroke="#ccc"/>
-  <text x="480" y="150" font-size="10.5" fill="#888" text-anchor="middle">⟵ TraceRecorder 全程记录 · AgentEvaluator 自动评分 ⟶</text>
+  <rect x="148" y="120" width="650" height="26" rx="3" fill="#f7f8fa" stroke="#d5d8dc"/>
+  <text x="473" y="137" font-size="9.5" fill="#95a5a6" text-anchor="middle">⟵  TraceRecorder 全程记录  ·  AgentEvaluator 自动评分  ⟶</text>
 </svg>
