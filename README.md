@@ -1,8 +1,148 @@
 # LearningAgent
 
-一个具备 MCP 集成、多范围长期记忆、混合检索、Agent 可观测性和自适应学习反馈的个性化 AI 学习代理。
+> **Personalized AI Learning Agent** with RAG, Multi-scope Memory, Adaptive Mastery Tracking & MCP Integration
 
-## 功能特性
+[![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-blue?logo=python&logoColor=white)](https://www.python.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![MCP Compatible](https://img.shields.io/badge/MCP-Compatible-purple)](https://modelcontextprotocol.io)
+
+一个具备 **RAG 混合检索**、**多范围长期记忆 (5 信号加权)**、**概念级自适应掌握度追踪**、**全链路可观测性** 和 **MCP 标准化接口** 的个性化 AI 学习代理。
+
+> 📐 **[查看完整架构图（交互式 HTML）](docs/architecture.html)** — 包含 6 张 SVG 系统图 + 技术亮点卡片
+
+---
+
+## Architecture Overview
+
+### Three-Layer Agent Architecture
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│  Interface Layer          CLI REPL │ Web Dashboard │ MCP Server │ REST API │
+├─────────────────────────────────────────────────────────────────────┤
+│  Coordination Layer       MainAgent                                 │
+│                           ├─ Intent Recognizer (关键词 + 自然语言)  │
+│                           ├─ Command Router (7 意图路由)            │
+│                           ├─ Session Manager (多轮会话状态)         │
+│                           └─ TraceRecorder (全链路追踪)             │
+├─────────────────────────────────────────────────────────────────────┤
+│  Functional Layer                                                   │
+│    CreatePlanAgent    AddKnowledgeProcessor   VibeLearningAgent      │
+│    学习计划生成        知识入库+RAG索引         互动学习+掌握度追踪    │
+│                                                                     │
+│    SummaryAgent       RepoAnalyzer / PaperAnalyzer / QuizGenerator  │
+│    进度报告+薄弱点     专业分析器（GitHub/论文/测验）                  │
+├─────────────────────────────────────────────────────────────────────┤
+│  Infrastructure Layer                                               │
+│    RAG Pipeline │ Memory System │ MasteryTracker │ Observability     │
+│    ChromaDB+BM25│ 7type JSONL   │ 间隔复习        │ 5-dim Evaluator  │
+└─────────────────────────────────────────────────────────────────────┘
+```
+
+### End-to-End Data Flow
+
+```
+User Input ──→ MainAgent ──→ Domain Agent ──┬→ RAG 检索 ──┐
+  (CLI/Web/MCP)  (意图+路由)   (业务逻辑)    └→ Memory 检索 ┘
+                                                    │
+                                              LLM 增强生成
+                                                    │
+                                        ┌───────────┴───────────┐
+                                        ↓                       ↓
+                                   写入存储                更新掌握度
+                                   (MD/JSON/JSONL/ChromaDB) (MasteryTracker)
+                                        │
+                                        ↓
+                                   Response (流式输出)
+
+         ◄──── TraceRecorder 全程记录 · AgentEvaluator 自动评分 ────►
+```
+
+---
+
+## Technical Highlights
+
+### 1. 双通道混合检索 (Hybrid RAG)
+
+```
+                    ┌→ Vector Search (bge-m3 + ChromaDB) ─┐
+User Query → Fork ──┤                                      ├→ Score Fusion → LLM Context
+                    └→ BM25 Sparse Search (rank_bm25) ────┘
+
+    final_score = α × BM25_normalized + (1 − α) × vector_cosine,  α = 0.3
+```
+
+- **稠密检索**: BAAI/bge-m3 sentence-transformers 生成向量，ChromaDB 持久化存储
+- **稀疏检索**: rank_bm25 构建倒排索引，中英混合分词
+- **分数融合**: 加权合并两路结果，阈值过滤后注入 LLM 上下文
+- **Markdown 感知分块**: 递归分块保留文档结构，避免跨章节截断
+
+### 2. 5 信号加权记忆检索 (Multi-scope Memory)
+
+```
+7 Memory Types: fact | preference | weakness | milestone | misconception | resource | session_summary
+                                        ↓
+                        MemoryStore (Append-only JSONL)
+                        ├── records.jsonl (全量)
+                        └── by_domain/<domain>.jsonl (分片)
+                                        ↓
+                            MemoryRetriever (5-Signal)
+┌──────────┬──────────┬──────────┬──────────────┬──────────┐
+│ Semantic │ Keyword  │ Entity   │ Importance   │ Recency  │
+│ w = 0.40 │ w = 0.25 │ w = 0.20 │ w = 0.10     │ w = 0.05 │
+└──────────┴──────────┴──────────┴──────────────┴──────────┘
+    score = 0.40·semantic + 0.25·keyword + 0.20·entity + 0.10·importance + 0.05·recency
+```
+
+- **自动降级**: 有 Embedder 用向量语义，无则 fallback 到 TF-IDF
+- **实体提取**: Markdown 反引号 / CamelCase / 技术关键词规则提取
+- **时效衰减**: `recency = 1 / (1 + 0.1 × days)`，新记忆权重更高
+
+### 3. 概念级自适应学习 (Adaptive Mastery)
+
+```
+VibeLearning ──→ Answer Eval ──→ MasteryTracker ──→ Weak Concepts
+ (Free/Quiz)     (LLM 判定)      (±mastery)        (mastery < 0.4)
+      ↑                                                    │
+      └──── 反馈循环：薄弱概念优先出题 + 间隔复习调度 ────────┘
+
+    correct → mastery += 0.08, review_due = +3 days
+    wrong   → mastery -= 0.10, review_due = +1 day
+```
+
+- **概念粒度**: 每个知识概念独立追踪 mastery / confidence / attempt_count
+- **间隔复习**: 答对延长复习间隔，答错缩短，类似简化版 SM-2 算法
+- **薄弱检测**: `mastery < 0.4` 自动标记为薄弱，SummaryAgent 报告中高亮
+
+### 4. 全链路可观测性 (Agent Observability)
+
+```
+TraceRecorder: Command → Intent → Memory/RAG → LLM → Result → Persist
+                                                         ↓
+                                               AgentEvaluator (5-dim)
+┌────────────────┬───────────────────┬──────────────┬────────────────┬────────────────┐
+│ intent_detected│ tool_success_rate │ memory_used  │ error_recovered│ output_format  │
+│ w = 0.20       │ w = 0.30          │ w = 0.15     │ w = 0.15       │ w = 0.20       │
+└────────────────┴───────────────────┴──────────────┴────────────────┴────────────────┘
+```
+
+- **确定性评分**: 无需 LLM 即可量化 Agent 执行质量
+- **全链路追踪**: 每条命令从路由到完成，记录 intent / steps / latency / error
+- **持久化**: JSON 文件按日期归档，支持 Web Dashboard 展示
+
+### 5. MCP 标准化接口
+
+| 类型 | 项目 | 说明 |
+|------|------|------|
+| **Tools** (7) | `list_learning_domains` `get_learning_plan` `get_progress_summary` `search_learning_memory` `add_knowledge_note` `get_weak_concepts` `update_concept_mastery` | 完整学习功能 CRUD |
+| **Resources** | `learning://domains` `learning://domain/{d}/plan` 等 | 静态资源暴露 |
+| **Prompts** (4) | `learn_from_github_repo` `paper_to_learning_plan` `weekly_learning_review` `quiz_weak_points` | 预设提示词模板 |
+
+通过 `FastMCP` 暴露，任何 MCP 客户端（Claude Desktop、Cursor 等）即插即用。
+
+---
+
+## Features
 
 - 📚 **创建学习计划** — 基于领域描述、GitHub 项目或学术论文生成个性化学习路径
 - ✨ **添加知识笔记** — 智能分类、标签化并管理学习笔记，自动写入长期记忆 + RAG 向量索引
@@ -10,7 +150,7 @@
 - 📊 **进度追踪** — 结合知识总结、长期记忆、薄弱概念生成进度报告
 - 🔍 **RAG 检索增强** — ChromaDB 向量存储 + BM25 混合检索，注入学习上下文
 - 🧠 **多范围长期记忆** — JSONL 存储，支持 7 种记忆类型，5 信号混合检索
-- � **自适应学习** — 概念级掌握度追踪、薄弱点检测、间隔复习推荐
+- 🎓 **自适应学习** — 概念级掌握度追踪、薄弱点检测、间隔复习推荐
 - 📮 **MCP Server** — 将学习功能暴露为标准化 MCP Tools/Resources/Prompts
 - 📍 **Agent 可观测性** — 全链路追踪 + 5 维度确定性评估
 
@@ -170,37 +310,41 @@ SummaryAgent 综合分析以下数据：
 - `knowledge_summary.md` - 已掌握的知识
 - `session_summary.md` - 学习历程和进步轨迹
 
-## 架构
+## 项目结构
 
 ```
-CLI / MCP Client
-      ↓
-MainAgent Router (意图识别 + 链路追踪)
-      ↓
-CreatePlan | AddKnowledge | VibeLearning | Summary
-      ↓
-RAG Pipeline | MemoryStore | MasteryTracker | TraceRecorder
-      ↓
-Local Markdown/JSON/ChromaDB Storage
+learningAgent/
+├── agents/                 # 功能层 Agent
+│   ├── create_plan_agent.py    # 学习计划生成
+│   ├── summary_agent.py        # 进度报告 + 薄弱点分析
+│   └── vibe_learning_agent.py  # 互动学习 + 掌握度追踪
+├── core/                   # 核心基础设施
+│   ├── main_agent.py           # 协调层：意图识别 + 路由 + 追踪
+│   ├── memory_schema.py        # 7 种记忆类型定义
+│   ├── memory_store.py         # JSONL 持久化存储
+│   ├── memory_retriever.py     # 5 信号混合检索
+│   ├── mastery_tracker.py      # 概念级掌握度 + 间隔复习
+│   ├── tracing.py              # 全链路追踪记录器
+│   ├── evaluation.py           # 5 维度确定性评估器
+│   ├── entity_extractor.py     # 实体提取（MD/CamelCase/关键词）
+│   └── rag/                    # RAG Pipeline
+│       ├── embedder.py             # BAAI/bge-m3 向量化
+│       ├── chunker.py              # Markdown 感知递归分块
+│       ├── vector_store.py         # ChromaDB 向量存储
+│       ├── retriever.py            # BM25 + Vector 混合检索
+│       └── evaluator.py            # RAG 质量评估
+├── processors/             # 处理器
+│   └── add_knowledge.py        # 知识入库 + RAG 索引 + 记忆写入
+├── specialist/             # 专业分析器
+│   ├── repo_analyzer.py        # GitHub 仓库分析
+│   ├── paper_analyzer.py       # 学术论文分析
+│   └── quiz_generator.py       # 测验题生成
+├── mcp_server/             # MCP Server (7 Tools + Resources + 4 Prompts)
+├── api/                    # FastAPI REST API
+├── web/                    # React + Vite + TailwindCSS 前端
+├── cli/                    # CLI REPL 入口
+└── main.py                 # 主入口
 ```
-
-### 三层 Agent 架构
-
-- **协调层**: `MainAgent` — 意图识别、路由、链路追踪
-- **功能层**:
-  - `CreatePlanAgent` — 学习计划生成
-  - `AddKnowledgeProcessor` — 知识入库 + RAG 索引 + 长期记忆
-  - `VibeLearningAgent` — 互动学习 + 掌握度追踪
-  - `SummaryAgent` — 进度报告 + 记忆检索 + 薄弱点分析
-- **专业层**: `RepoAnalyzerAgent` / `PaperAnalyzerAgent` / `QuizGeneratorAgent`
-
-### 基础设施
-
-- **RAG Pipeline**: `Embedder` → `Chunker` → `VectorStore` (ChromaDB) → `HybridRetriever` (BM25 + Vector)
-- **多范围记忆**: `MemorySchema` → `MemoryStore` (JSONL) → `MemoryRetriever` (5-signal hybrid)
-- **自适应学习**: `MasteryTracker` — 概念级掌握度、间隔复习
-- **可观测性**: `TraceRecorder` + `AgentEvaluator` — 全链路追踪和 5 维度确定性评分
-- **MCP Server**: Tools / Resources / Prompts — 标准化服务接口
 
 ## 开发
 
@@ -228,14 +372,6 @@ React + TailwindCSS + Recharts 单页应用，通过 FastAPI 后端调用 Learni
 - **总览页** — 领域卡片、掌握度进度条、统计数据
 - **领域详情** — 4 个 Tab：学习计划 / 知识库(含语义搜索) / 互动学习 / 掌握度(雷达图+柱状图)
 - **执行追踪** — Agent 链路追踪列表、展开查看评估评分
-
-### MCP 集成
-
-LearningAgent 可作为 MCP Server 被外部 AI 客户端调用：
-
-- **Tools**: `list_learning_domains` / `get_learning_plan` / `get_progress_summary` / `search_learning_memory` / `add_knowledge_note` / `get_weak_concepts` / `update_concept_mastery`
-- **Resources**: `learning://domains` / `learning://domain/{domain}/plan` / `knowledge_summary` / `session_summary` / `mastery`
-- **Prompts**: `learn_from_github_repo` / `paper_to_learning_plan` / `weekly_learning_review` / `quiz_weak_points`
 
 ## 开发状态
 
@@ -273,8 +409,9 @@ LearningAgent 可作为 MCP Server 被外部 AI 客户端调用：
 - [x] 互动学习聊天界面 + 记忆语义搜索
 - [x] Agent 执行追踪面板 + 评估详情
 
-## 规划文档
+## 文档
 
+- 📐 [**架构图（交互式 HTML）**](docs/architecture.html) — 6 张 SVG 系统图 + 技术亮点
 - [设计文档](docs/plans/2025-01-09-learningagent-design.md)
 - [实施计划](docs/plans/2025-01-09-core-infrastructure.md)
 - [Agent 升级路线图](docs/plans/2026-05-14-agent-upgrade-roadmap.md)
