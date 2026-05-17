@@ -26,3 +26,7 @@ ragas>=0.1.0
 
 # MCP Server
 mcp[cli]>=1.0.0
+
+# Web Dashboard API
+fastapi>=0.100.0
+uvicorn>=0.20.0

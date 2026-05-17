@@ -208,20 +208,26 @@ Local Markdown/JSON/ChromaDB Storage
 # 运行全量测试
 pytest tests/ -v
 
+# 启动 Web Dashboard
+python api/server.py             # 后端 API (localhost:8000)
+cd web && npm run dev            # 前端 (localhost:5173)
+
 # 启动 MCP Server
 python -m mcp_server.server
-
-# 运行真实环境演示（需要配置 .env）
-python demo_create_plan.py       # CreatePlan 功能演示
-python demo_add_knowledge.py    # AddKnowledge 功能演示
-python demo_vibe_learning.py    # VibeLearning 功能演示
-python demo_summary_learning.py # Summary 功能演示
 
 # 代码质量
 black .
 mypy .
 flake8 .
 ```
+
+### Web Dashboard
+
+React + TailwindCSS + Recharts 单页应用，通过 FastAPI 后端调用 LearningAgent 核心能力：
+
+- **总览页** — 领域卡片、掌握度进度条、统计数据
+- **领域详情** — 4 个 Tab：学习计划 / 知识库(含语义搜索) / 互动学习 / 掌握度(雷达图+柱状图)
+- **执行追踪** — Agent 链路追踪列表、展开查看评估评分
 
 ### MCP 集成
 
@@ -256,6 +262,16 @@ LearningAgent 可作为 MCP Server 被外部 AI 客户端调用：
 - [x] MasteryTracker — 概念级掌握度、间隔复习、薄弱点检测
 - [x] MCP Server — 7 Tools + Resources + 4 Prompts
 - [x] 集成到全部学习流（记忆写入/检索/掌握度/追踪）
+
+### ✅ v0.8: Web Dashboard
+
+- [x] FastAPI REST API — 领域/知识/掌握度/记忆/追踪全套接口
+- [x] React + Vite + TailwindCSS 前端
+- [x] Dashboard 总览页 — 领域卡片 + 统计数据
+- [x] 领域详情页 — Plan / Knowledge / Practice / Progress 4 Tab
+- [x] 掌握度可视化 — Recharts 雷达图 + 柱状图 + 薄弱点高亮
+- [x] 互动学习聊天界面 + 记忆语义搜索
+- [x] Agent 执行追踪面板 + 评估详情
 
 ## 规划文档
 

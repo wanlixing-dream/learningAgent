@@ -53,3 +53,7 @@ htmlcov/
 *.log
 claude-code-sourcemap
 .venv/
+
+# Frontend
+node_modules/
+web/dist/
