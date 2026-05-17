@@ -160,7 +160,7 @@ TraceRecorder: Command → Intent → Memory/RAG → LLM → Result → Persist
 
 ```bash
 # 克隆仓库
-git clone https://github.com/Yixiang-Wu/learningAgent.git
+git clone https://github.com/wanlixing-dream/learningAgent.git
 cd learningAgent
 
 # 创建 conda 虚拟环境
