@@ -16,47 +16,15 @@
 
 ### Three-Layer Agent Architecture
 
-```
-┌─────────────────────────────────────────────────────────────────────┐
-│  Interface Layer          CLI REPL │ Web Dashboard │ MCP Server │ REST API │
-├─────────────────────────────────────────────────────────────────────┤
-│  Coordination Layer       MainAgent                                 │
-│                           ├─ Intent Recognizer (关键词 + 自然语言)  │
-│                           ├─ Command Router (7 意图路由)            │
-│                           ├─ Session Manager (多轮会话状态)         │
-│                           └─ TraceRecorder (全链路追踪)             │
-├─────────────────────────────────────────────────────────────────────┤
-│  Functional Layer                                                   │
-│    CreatePlanAgent    AddKnowledgeProcessor   VibeLearningAgent      │
-│    学习计划生成        知识入库+RAG索引         互动学习+掌握度追踪    │
-│                                                                     │
-│    SummaryAgent       RepoAnalyzer / PaperAnalyzer / QuizGenerator  │
-│    进度报告+薄弱点     专业分析器（GitHub/论文/测验）                  │
-├─────────────────────────────────────────────────────────────────────┤
-│  Infrastructure Layer                                               │
-│    RAG Pipeline │ Memory System │ MasteryTracker │ Observability     │
-│    ChromaDB+BM25│ 7type JSONL   │ 间隔复习        │ 5-dim Evaluator  │
-└─────────────────────────────────────────────────────────────────────┘
-```
+<p align="center">
+  <img src="docs/images/fig1-architecture.svg" alt="Fig 1. Three-Layer Agent Architecture" width="100%"/>
+</p>
 
 ### End-to-End Data Flow
 
-```
-User Input ──→ MainAgent ──→ Domain Agent ──┬→ RAG 检索 ──┐
-  (CLI/Web/MCP)  (意图+路由)   (业务逻辑)    └→ Memory 检索 ┘
-                                                    │
-                                              LLM 增强生成
-                                                    │
-                                        ┌───────────┴───────────┐
-                                        ↓                       ↓
-                                   写入存储                更新掌握度
-                                   (MD/JSON/JSONL/ChromaDB) (MasteryTracker)
-                                        │
-                                        ↓
-                                   Response (流式输出)
-
-         ◄──── TraceRecorder 全程记录 · AgentEvaluator 自动评分 ────►
-```
+<p align="center">
+  <img src="docs/images/fig6-dataflow.svg" alt="Fig 6. End-to-End Data Flow" width="100%"/>
+</p>
 
 ---
 
@@ -64,13 +32,9 @@ User Input ──→ MainAgent ──→ Domain Agent ──┬→ RAG 检索 �
 
 ### 1. 双通道混合检索 (Hybrid RAG)
 
-```
-                    ┌→ Vector Search (bge-m3 + ChromaDB) ─┐
-User Query → Fork ──┤                                      ├→ Score Fusion → LLM Context
-                    └→ BM25 Sparse Search (rank_bm25) ────┘
-
-    final_score = α × BM25_normalized + (1 − α) × vector_cosine,  α = 0.3
-```
+<p align="center">
+  <img src="docs/images/fig2-rag-pipeline.svg" alt="Fig 2. RAG Pipeline" width="100%"/>
+</p>
 
 - **稠密检索**: BAAI/bge-m3 sentence-transformers 生成向量，ChromaDB 持久化存储
 - **稀疏检索**: rank_bm25 构建倒排索引，中英混合分词
@@ -79,20 +43,9 @@ User Query → Fork ──┤                                      ├→ Score 
 
 ### 2. 5 信号加权记忆检索 (Multi-scope Memory)
 
-```
-7 Memory Types: fact | preference | weakness | milestone | misconception | resource | session_summary
-                                        ↓
-                        MemoryStore (Append-only JSONL)
-                        ├── records.jsonl (全量)
-                        └── by_domain/<domain>.jsonl (分片)
-                                        ↓
-                            MemoryRetriever (5-Signal)
-┌──────────┬──────────┬──────────┬──────────────┬──────────┐
-│ Semantic │ Keyword  │ Entity   │ Importance   │ Recency  │
-│ w = 0.40 │ w = 0.25 │ w = 0.20 │ w = 0.10     │ w = 0.05 │
-└──────────┴──────────┴──────────┴──────────────┴──────────┘
-    score = 0.40·semantic + 0.25·keyword + 0.20·entity + 0.10·importance + 0.05·recency
-```
+<p align="center">
+  <img src="docs/images/fig3-memory-system.svg" alt="Fig 3. Multi-Scope Memory System" width="100%"/>
+</p>
 
 - **自动降级**: 有 Embedder 用向量语义，无则 fallback 到 TF-IDF
 - **实体提取**: Markdown 反引号 / CamelCase / 技术关键词规则提取
@@ -100,15 +53,9 @@ User Query → Fork ──┤                                      ├→ Score 
 
 ### 3. 概念级自适应学习 (Adaptive Mastery)
 
-```
-VibeLearning ──→ Answer Eval ──→ MasteryTracker ──→ Weak Concepts
- (Free/Quiz)     (LLM 判定)      (±mastery)        (mastery < 0.4)
-      ↑                                                    │
-      └──── 反馈循环：薄弱概念优先出题 + 间隔复习调度 ────────┘
-
-    correct → mastery += 0.08, review_due = +3 days
-    wrong   → mastery -= 0.10, review_due = +1 day
-```
+<p align="center">
+  <img src="docs/images/fig4-adaptive-learning.svg" alt="Fig 4. Adaptive Learning Loop" width="100%"/>
+</p>
 
 - **概念粒度**: 每个知识概念独立追踪 mastery / confidence / attempt_count
 - **间隔复习**: 答对延长复习间隔，答错缩短，类似简化版 SM-2 算法
@@ -116,15 +63,9 @@ VibeLearning ──→ Answer Eval ──→ MasteryTracker ──→ Weak Conce
 
 ### 4. 全链路可观测性 (Agent Observability)
 
-```
-TraceRecorder: Command → Intent → Memory/RAG → LLM → Result → Persist
-                                                         ↓
-                                               AgentEvaluator (5-dim)
-┌────────────────┬───────────────────┬──────────────┬────────────────┬────────────────┐
-│ intent_detected│ tool_success_rate │ memory_used  │ error_recovered│ output_format  │
-│ w = 0.20       │ w = 0.30          │ w = 0.15     │ w = 0.15       │ w = 0.20       │
-└────────────────┴───────────────────┴──────────────┴────────────────┴────────────────┘
-```
+<p align="center">
+  <img src="docs/images/fig5-observability.svg" alt="Fig 5. Agent Observability" width="100%"/>
+</p>
 
 - **确定性评分**: 无需 LLM 即可量化 Agent 执行质量
 - **全链路追踪**: 每条命令从路由到完成，记录 intent / steps / latency / error

@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 250" width="920" height="250" font-family="Segoe UI, PingFang SC, Microsoft YaHei, sans-serif">
+  <defs>
+    <marker id="o1" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#fb8500"/></marker>
+    <marker id="o2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#4361ee"/></marker>
+    <marker id="o3" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#7209b7"/></marker>
+    <marker id="o4" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#06d6a0"/></marker>
+    <linearGradient id="bg5" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fafbff"/><stop offset="100%" stop-color="#f5f5fa"/>
+    </linearGradient>
+  </defs>
+  <rect width="920" height="250" rx="12" fill="url(#bg5)" stroke="#e0e0e8" stroke-width="1"/>
+  <text x="460" y="28" font-size="15" fill="#1a1a2e" text-anchor="middle" font-weight="700">Fig 5. Agent Observability — Full-chain Tracing &amp; 5-Dimension Evaluation</text>
+
+  <!-- Trace chain -->
+  <text x="430" y="50" font-size="10.5" fill="#888" text-anchor="middle" font-style="italic">TraceRecorder — Full-chain Tracing</text>
+  <rect x="40" y="58" width="115" height="42" rx="6" fill="#fb8500"/>
+  <text x="97" y="83" font-size="11" fill="#fff" text-anchor="middle" font-weight="500">User Command</text>
+  <line x1="155" y1="79" x2="185" y2="79" stroke="#fb8500" stroke-width="1.5" marker-end="url(#o1)"/>
+  <rect x="185" y="58" width="110" height="42" rx="6" fill="#fb8500"/>
+  <text x="240" y="83" font-size="11" fill="#fff" text-anchor="middle" font-weight="500">Intent Detect</text>
+  <line x1="295" y1="79" x2="325" y2="79" stroke="#fb8500" stroke-width="1.5" marker-end="url(#o1)"/>
+  <rect x="325" y="58" width="130" height="42" rx="6" fill="#4361ee"/>
+  <text x="390" y="83" font-size="11" fill="#fff" text-anchor="middle" font-weight="500">Memory / RAG</text>
+  <line x1="455" y1="79" x2="485" y2="79" stroke="#4361ee" stroke-width="1.5" marker-end="url(#o2)"/>
+  <rect x="485" y="58" width="110" height="42" rx="6" fill="#7209b7"/>
+  <text x="540" y="83" font-size="11" fill="#fff" text-anchor="middle" font-weight="500">LLM Call</text>
+  <line x1="595" y1="79" x2="625" y2="79" stroke="#7209b7" stroke-width="1.5" marker-end="url(#o3)"/>
+  <rect x="625" y="58" width="100" height="42" rx="6" fill="#06d6a0"/>
+  <text x="675" y="83" font-size="11" fill="#fff" text-anchor="middle" font-weight="500">Result</text>
+  <line x1="725" y1="79" x2="755" y2="79" stroke="#06d6a0" stroke-width="1.5" marker-end="url(#o4)"/>
+  <rect x="755" y="58" width="120" height="42" rx="6" fill="#1a1a2e"/>
+  <text x="815" y="83" font-size="11" fill="#fff" text-anchor="middle" font-weight="500">Persist (JSON)</text>
+
+  <!-- Evaluation -->
+  <rect x="100" y="125" width="720" height="105" rx="10" fill="#fef3f2" stroke="#f72585" stroke-width="1.5"/>
+  <text x="120" y="150" font-size="12" fill="#f72585" font-weight="600">AgentEvaluator — 5 Deterministic Dimensions (Weighted Score)</text>
+
+  <rect x="120" y="162" width="125" height="48" rx="5" fill="#f72585"/>
+  <text x="182" y="182" font-size="10" fill="#fff" text-anchor="middle" font-weight="600">intent_detected</text>
+  <text x="182" y="200" font-size="10" fill="#ffc2dd" text-anchor="middle">w = 0.20</text>
+
+  <rect x="255" y="162" width="135" height="48" rx="5" fill="#f72585"/>
+  <text x="322" y="182" font-size="10" fill="#fff" text-anchor="middle" font-weight="600">tool_success_rate</text>
+  <text x="322" y="200" font-size="10" fill="#ffc2dd" text-anchor="middle">w = 0.30</text>
+
+  <rect x="400" y="162" width="125" height="48" rx="5" fill="#f72585"/>
+  <text x="462" y="182" font-size="10" fill="#fff" text-anchor="middle" font-weight="600">memory_used</text>
+  <text x="462" y="200" font-size="10" fill="#ffc2dd" text-anchor="middle">w = 0.15</text>
+
+  <rect x="535" y="162" width="135" height="48" rx="5" fill="#f72585"/>
+  <text x="602" y="182" font-size="10" fill="#fff" text-anchor="middle" font-weight="600">error_recovered</text>
+  <text x="602" y="200" font-size="10" fill="#ffc2dd" text-anchor="middle">w = 0.15</text>
+
+  <rect x="680" y="162" width="125" height="48" rx="5" fill="#f72585"/>
+  <text x="742" y="182" font-size="10" fill="#fff" text-anchor="middle" font-weight="600">output_format</text>
+  <text x="742" y="200" font-size="10" fill="#ffc2dd" text-anchor="middle">w = 0.20</text>
+</svg>
