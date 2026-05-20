@@ -146,7 +146,7 @@ class AddKnowledgeProcessor:
             response = self.llm.invoke(messages)
 
             # 尝试解析 JSON（简化实现：使用规则提取）
-            return self._extract_metadata_from_text(response)
+            return self._extract_metadata_from_text(response, domain)
         except Exception:
             # 降级：使用规则分析
             return {
@@ -157,7 +157,7 @@ class AddKnowledgeProcessor:
                 "domain": domain,  # 添加 domain 字段
             }
 
-    def _extract_metadata_from_text(self, text: str) -> Dict[str, any]:
+    def _extract_metadata_from_text(self, text: str, domain: str) -> Dict[str, any]:
         """
         从文本中提取元数据（简化版）
 

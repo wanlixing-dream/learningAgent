@@ -25,10 +25,14 @@ venv/
 env/
 ENV/
 .venv
+.venv/
+learningAgent-env/
 
 # Environment Variables
 .env
 .env.local
+.env.*
+!.env.example
 
 # IDE
 .vscode/
@@ -47,6 +51,10 @@ Thumbs.db
 htmlcov/
 .tox/
 *.cover
+.mypy_cache/
+.ruff_cache/
+.pyre/
+.pytype/
 
 # Project Specific
 .claude/
@@ -57,3 +65,10 @@ claude-code-sourcemap
 # Frontend
 node_modules/
 web/dist/
+.learningAgent/
+.learning-agent/
+logs/
+data/
+temp/
+tmp/
+*.tmp

@@ -75,6 +75,20 @@ class TestAddKnowledgeProcessor:
         assert "tags" in result
         assert isinstance(result["tags"], list)
 
+    def test_extract_metadata_preserves_domain(self, processor):
+        """测试元数据提取保留领域"""
+        response = """{
+  "category": "算法",
+  "tags": ["监督学习", "分类"],
+  "key_concepts": ["决策树"],
+  "summary": "介绍决策树算法"
+}"""
+
+        result = processor._extract_metadata_from_text(response, domain="机器学习")
+
+        assert result["domain"] == "机器学习"
+        assert result["category"]
+
     def test_add_knowledge_from_text(self, processor, test_domain):
         """测试从文本添加知识"""
         content = "# 决策树算法\n\n决策树是一种监督学习算法..."
