@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="620" viewBox="0 0 1100 620" role="img" aria-labelledby="title desc">
+  <title id="title">LearningAgent Production Target Architecture</title>
+  <desc id="desc">Cloud-ready service architecture for Study AI and LearningAgent integration.</desc>
+  <defs>
+    <style>
+      .bg{fill:#f8fafc}.box{fill:#fff;stroke:#334155;stroke-width:1.4;rx:8}.head{fill:#0f172a}.title{font:700 18px Arial;fill:#0f172a}.label{font:600 14px Arial;fill:#0f172a}.small{font:12px Arial;fill:#475569}.arrow{stroke:#2563eb;stroke-width:2;fill:none;marker-end:url(#arrow)}.muted{stroke:#94a3b8;stroke-width:1.5;fill:none;marker-end:url(#arrow)}
+    </style>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#2563eb"/>
+    </marker>
+  </defs>
+  <rect class="bg" width="1100" height="620"/>
+  <text x="40" y="42" class="title">Production target: Study AI + LearningAgent</text>
+
+  <rect class="box" x="40" y="80" width="210" height="110"/>
+  <text x="64" y="116" class="label">Study AI Web</text>
+  <text x="64" y="144" class="small">Graph, upload, review queue</text>
+  <text x="64" y="166" class="small">No direct Python imports</text>
+
+  <rect class="box" x="310" y="80" width="230" height="110"/>
+  <text x="334" y="116" class="label">API Gateway</text>
+  <text x="334" y="144" class="small">Auth, rate limit, request ids</text>
+  <text x="334" y="166" class="small">Versioned REST contracts</text>
+
+  <rect class="box" x="610" y="70" width="250" height="130"/>
+  <text x="634" y="112" class="label">LearningAgent API</text>
+  <text x="634" y="140" class="small">Plans, sessions, memory</text>
+  <text x="634" y="162" class="small">RAG search, Study AI candidates</text>
+
+  <rect class="box" x="900" y="70" width="170" height="130"/>
+  <text x="926" y="112" class="label">MCP Server</text>
+  <text x="926" y="140" class="small">Tools</text>
+  <text x="926" y="162" class="small">Resources</text>
+  <text x="926" y="184" class="small">Prompts</text>
+
+  <rect class="box" x="610" y="260" width="250" height="120"/>
+  <text x="634" y="300" class="label">Worker Pool</text>
+  <text x="634" y="328" class="small">Parse, chunk, embed</text>
+  <text x="634" y="350" class="small">Classify, synthesize, evaluate</text>
+
+  <rect class="box" x="310" y="260" width="230" height="120"/>
+  <text x="334" y="300" class="label">Application Services</text>
+  <text x="334" y="328" class="small">Learning domain logic</text>
+  <text x="334" y="350" class="small">Study AI adapter service</text>
+
+  <rect class="box" x="80" y="450" width="210" height="90"/>
+  <text x="104" y="486" class="label">PostgreSQL</text>
+  <text x="104" y="514" class="small">Plans, sessions, memory</text>
+
+  <rect class="box" x="340" y="450" width="200" height="90"/>
+  <text x="364" y="486" class="label">pgvector</text>
+  <text x="364" y="514" class="small">Embeddings, retrieval</text>
+
+  <rect class="box" x="590" y="450" width="200" height="90"/>
+  <text x="614" y="486" class="label">Object Storage</text>
+  <text x="614" y="514" class="small">Uploads, artifacts, traces</text>
+
+  <rect class="box" x="840" y="450" width="180" height="90"/>
+  <text x="864" y="486" class="label">Redis</text>
+  <text x="864" y="514" class="small">Queue, cache, limits</text>
+
+  <path class="arrow" d="M250 135 H310"/>
+  <path class="arrow" d="M540 135 H610"/>
+  <path class="muted" d="M860 135 H900"/>
+  <path class="arrow" d="M735 200 V260"/>
+  <path class="arrow" d="M610 320 H540"/>
+  <path class="arrow" d="M425 380 V450"/>
+  <path class="arrow" d="M500 380 C520 420 420 420 440 450"/>
+  <path class="arrow" d="M735 380 V450"/>
+  <path class="arrow" d="M860 320 C950 330 950 410 930 450"/>
+</svg>
