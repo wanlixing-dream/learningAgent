@@ -81,10 +81,13 @@ def start_repl():
                 break
 
             # 显示结果
-            # 注意：如果 agent.streaming=True，流式输出已经打印到 stdout
-            # 这里只打印非流式的结果（如帮助信息、错误消息等）
-            if not agent.streaming:
+            # 流式命令（vibe/create/summary）已经在执行时打印了输出
+            # 非流式命令（help/list/add 等）的返回结果需要在这里打印
+            if result and result != "EXIT" and not agent._output_printed:
                 print(result)
+            agent._output_printed = False
+
+
 
         except KeyboardInterrupt:
             print("\n\n👋 操作已取消")

@@ -65,6 +65,7 @@ class MainAgent(SimpleAgent):
         # 添加流式输出支持
         from utils.streaming import should_stream
         self.streaming = should_stream(streaming)
+        self._output_printed = False
 
         # 会话状态管理
         self.active_session = None  # {"domain": str, "mode": str, "round": int}
@@ -190,6 +191,7 @@ class MainAgent(SimpleAgent):
                 clean_input = input_data
 
             agent = CreatePlanAgent(self.llm, streaming=self.streaming)
+            self._output_printed = True
             return agent.run(clean_input)
         except Exception as e:
             return f"❌ 创建学习计划失败：{e}"
@@ -313,6 +315,7 @@ class MainAgent(SimpleAgent):
                 "agent": agent,
                 "streaming": self.streaming  # 保存 streaming 设置
             }
+            self._output_printed = True
 
             return result
 
@@ -353,6 +356,7 @@ class MainAgent(SimpleAgent):
             # 生成学习总结
             agent = SummaryAgent(self.llm, self.file_manager,
                                 streaming=self.streaming)
+            self._output_printed = True
             return agent.run(domain)
 
         except Exception as e:
@@ -418,6 +422,7 @@ class MainAgent(SimpleAgent):
             # 增加轮次计数
             self.active_session["round"] += 1
 
+            self._output_printed = True
             return result
 
         except Exception as e:
